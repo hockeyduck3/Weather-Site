@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand{
+h2, .navbar-brand, .input-group{
     font-family: 'Yellowtail', cursive;
 }
 
@@ -56,11 +56,25 @@ main h2 {
 
 .form-control {
     height: 65px;
+    border-radius: 1rem;
+    font-size: 30px;
+}
+
+.btn {
+    border-radius: 1rem;
+    width: 120px;
+    color: white;
+    background-color: #444;
+    font-size: 25px;
+}
+
+.btn:hover {
+    background-color: rgb(116, 116, 116);
 }
 
 .input-group {
     height: 65px;
-    width: 85%;
+    width: 95%;
     margin: 100px auto;
 }
 
