@@ -23,6 +23,7 @@ h2, .navbar-brand, .input-group{
 .navbar {
     border-bottom: 3px solid black;
     padding: 20px 0;
+    letter-spacing: 3px;
 }
 
 .dateTime {
