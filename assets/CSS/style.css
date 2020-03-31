@@ -22,19 +22,13 @@ h2, .navbar-brand, .input-group{
 
 .navbar {
     border-bottom: 3px solid black;
-    padding: 0;
-}
-
-.navbar-brand {
-    font-size: 30px;
-    margin-left: 2%;
-    margin-right: 0;
-    padding: 20px 0px;
+    padding: 20px 0;
 }
 
 .dateTime {
+    font-size: 30px;
     color: white;
-    margin: 0 auto 0 28%;
+    margin: 0 auto;
 }
 
 /* Main */
@@ -104,16 +98,6 @@ footer p{
     padding: 5px 0 0 2px;
 }
 
+/* Media */
 @media (max-width: 640px) {
-    .navbar {
-        flex-direction: column;
-    }
-
-    .navbar-brand {
-        margin: 0 auto;
-    }
-
-    .dateTime {
-        margin: 0 auto 10px auto;
-    }
 }
