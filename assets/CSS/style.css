@@ -54,6 +54,20 @@ main h2 {
     padding-right: 0;
 }
 
+.form-control {
+    height: 65px;
+}
+
+.input-group {
+    height: 65px;
+    width: 85%;
+    margin: 100px auto;
+}
+
+.hide {
+    display: none;
+}
+
 /* Footer */
 footer {
     margin-top: auto;
