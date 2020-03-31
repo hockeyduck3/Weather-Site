@@ -1,0 +1,71 @@
+html {
+    height: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    background-color: rgb(221, 221, 221);
+    min-height: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.bg-dark {
+    background-color: #444 !important;
+}
+
+/* Navbar */
+h2, .navbar-brand{
+    font-family: 'Yellowtail', cursive;
+}
+
+.navbar {
+    border-bottom: 3px solid black;
+    padding: 0;
+}
+
+.navbar-brand {
+    font-size: 30px;
+    margin: 0 auto;
+    padding: 20px 0px;
+}
+
+/* Main */
+main {
+    box-shadow: 2px 9px 15px -3px #444;
+    margin: 25px 5%;
+}
+
+main h2 {
+    font-size: 50px;
+}
+
+.card {
+    border: 3px solid #444;
+}
+
+.card-body {
+    padding: 1.04rem;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    height: 4.5rem;
+    width: 100%;
+    background-color: #444;
+    color: white;
+    text-align: center;
+    border-top: 3px solid rgb(145, 145, 145);
+}
+
+footer p{
+    margin: 1px 0 0 0;
+    padding: 5px 0 0 2px;
+}
