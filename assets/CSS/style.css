@@ -16,20 +16,25 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group{
+h2, .navbar-brand, .input-group, .cityChoices{
     font-family: 'Yellowtail', cursive;
 }
 
 .navbar {
     border-bottom: 3px solid black;
-    padding: 20px 0;
-    letter-spacing: 3px;
+    padding: 0;
+}
+
+.navbar-brand {
+    font-size: 30px;
+    margin: 0 auto;
+    padding: 20px 0px;
 }
 
 .dateTime {
-    font-size: 30px;
-    color: white;
-    margin: 0 auto;
+    font-size: 50px;
+    margin: 20px auto 0 auto;
+    letter-spacing: 3px;
 }
 
 /* Main */
@@ -71,6 +76,21 @@ main h2 {
 
 .btn:hover {
     background-color: rgb(116, 116, 116);
+}
+
+.cityChoices {
+    font-size: 35px;
+    text-align: center;
+}
+
+.btnRow {
+    width: auto;
+    text-align: center;
+}
+
+.btn-secondary {
+    margin-right: 15px;
+    width: 220px;
 }
 
 .input-group {
