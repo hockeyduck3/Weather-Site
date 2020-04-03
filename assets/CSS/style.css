@@ -36,7 +36,7 @@ h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText {
     color: white;
     font-size: 20px;
     letter-spacing: 3px;
-    margin: 0 25px;
+    margin: 0 25px 0 250px;
 }
 
 /* Main */
@@ -101,6 +101,10 @@ hr {
     font-size: 25px;
 }
 
+.form-control2 {
+    height: auto;
+}
+
 .searchBtn {
     width: 120px;
 }
@@ -135,9 +139,13 @@ hr {
 }
 
 .input-group {
-    height: 65px;
     width: 95%;
     margin: 45px auto;
+}
+
+.navSearch {
+    width: 400px;
+    margin: 0 15px 0 0;
 }
 
 .hide {
