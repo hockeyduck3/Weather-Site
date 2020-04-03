@@ -25,13 +25,15 @@ h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText {
     padding: 0;
 }
 
+/* Logo */
 .navbar-brand {
     font-size: 30px;
-    margin-left: 25px;
     justify-content: start;
+    margin-left: 25px;
     padding: 20px 0px;
 }
 
+/* Moment.js display */
 .dateTime {
     color: white;
     font-size: 20px;
@@ -55,12 +57,20 @@ hr {
     height: 2px;
 }
 
+.container-fluid {
+    margin: 0px auto 30px auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Welcome text */
 .greetingText {
-    margin-top: 50px;
     font-size: 50px;
+    margin-top: 50px;
     text-align: center;
 }
 
+/* Styling for the cards */
 .card {
     border: 3px solid #444;
 }
@@ -69,21 +79,16 @@ hr {
     padding: 1.04rem;
 }
 
+/* Styling for the 5-Day forecast */
 .box {
+    box-shadow: 6px 5px 1px -3px #444;
+    margin-right: 20px;
     padding: 0;
     width: 100%;
-    margin-right: 20px;
-    box-shadow: 6px 5px 1px -3px #444;
 }
 
 .boxContainer {
     flex-direction: row;
-}
-
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-    margin: 0px auto 30px auto;
 }
 
 .col-md-5 {
@@ -95,10 +100,11 @@ hr {
     margin-left: 4.5%;
 }
 
+/* Styling for the searchbars */
 .form-control {
-    height: 65px;
     border-radius: 1rem;
     font-size: 25px;
+    height: 65px;
 }
 
 .form-control2 {
@@ -109,10 +115,11 @@ hr {
     width: 120px;
 }
 
+/* Styling for the buttons */
 .btn {
+    background-color: #444;
     border-radius: 1rem;
     color: white;
-    background-color: #444;
     font-size: 25px;
 }
 
@@ -120,37 +127,41 @@ hr {
     background-color: rgb(116, 116, 116);
 }
 
+.cityBtn {
+    margin-right: 15px;
+}
+
+/* Styling for the previous choices text*/
 .previousChoices {
     font-size: 35px;
     text-align: center;
 }
 
+/* Styling for rows */
 .row {
     justify-content: center;
     margin-bottom: 35px;
 }
 
+/* This is so the 5-day forecast row doesn't have 35px of whitespace underneath the cards */
 .fiveDay {
     margin: 0;
 }
 
-.cityBtn {
-    margin-right: 15px;
-}
-
+/* Styling for the searchbars */
 .firstSearch {
-    width: 95%;
     margin: 45px auto 25px auto;
+    width: 95%;
 }
 
 .navSearch {
-    width: 400px;
     margin: 0 15px 0 0;
+    width: 400px;
 }
 
 .error {
-    border: 2px solid red;
     border-radius: 1rem;
+    border: 2px solid red;
     color: red;
     font-size: 20px;
     margin: 15px auto; 
@@ -165,13 +176,13 @@ hr {
 
 /* Footer */
 footer {
-    margin-top: auto;
-    height: 4.5rem;
-    width: 100%;
     background-color: #444;
-    color: white;
-    text-align: center;
     border-top: 3px solid rgb(145, 145, 145);
+    color: white;
+    height: 4.5rem;
+    margin-top: auto;
+    text-align: center;
+    width: 100%;
 }
 
 footer p{
@@ -186,11 +197,13 @@ footer p{
         margin-bottom: 0;
     }
 
+    /* Buttons in the previous/possible choices */
     .cityBtn {
-        width: 85%;
         margin: 0 auto 20px auto;
+        width: 85%;
     }
 
+    /* Moment.js display */
     .dateTime {
         font-size: 30px;
     }
