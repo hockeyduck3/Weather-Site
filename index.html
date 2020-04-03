@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <html lang="en-us">
-
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Link to bootstrap -->
@@ -36,16 +35,16 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="City Name or Zip Code" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                    <button class="btn btn-outline-secondary searchBtn" type="submit" id="button-addon2">Search</button>
                 </div>
             </div>
 
-            <p class="cityChoices">Possible City Choices</p>
-            <div class="btnRow">
-                <button type="button" class="btn btn-secondary">Salt Lake City</button>
-                <button type="button" class="btn btn-secondary">Tampa Bay</button>
-                <button type="button" class="btn btn-secondary">San Francisco</button>
-                <button type="button" class="btn btn-secondary">Houston</button>
+            <p class="previousChoices">Previous searches</p>
+            <div class="row">
+                <button type="button" class="btn btn-secondary cityBtn">Salt Lake City</button>
+                <button type="button" class="btn btn-secondary cityBtn">Tampa Bay</button>
+                <button type="button" class="btn btn-secondary cityBtn">San Francisco</button>
+                <button type="button" class="btn btn-secondary cityBtn">Houston</button>
             </div>
         </div>
 
@@ -61,5 +60,4 @@
         <!-- Link to the Javascript -->
         <script src="assets/Javascript/script.js"></script>
     </body>
-
 </html>
