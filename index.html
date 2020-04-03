@@ -16,7 +16,9 @@
         <!-- Navbar/Header -->
         <nav class="navbar navbar-dark bg-dark">
             <a class="navbar-brand" href="https://hockeyduck3.github.io/Portfolio">LJ Spencer</a>
+            <!-- Moment.js display -->
             <p class="dateTime"></p>
+            
             <!-- Navbar Searchbar -->
             <div class="input-group navSearch hide">
                 <input type="text" class="form-control form-control2" placeholder="Search another city" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -26,13 +28,16 @@
             </div>
         </nav>
 
+        <!-- Welcome text -->
         <h2 class="greetingText">Welcome! Let's check the weather.</h2>
         
+        <!-- Main body -->
         <div class="container-fluid">
-            <!-- Main body -->
+          <!-- Forecast -->
             <main class="card hide">
                 <section class="card-body">
-                    <h2 class="cityName">Salt Lake City</h2>
+                  <!-- Name of the city will get added here from the javascript -->
+                    <h2 class="cityName">City Name</h2>
 
                     <hr class="line">
 
@@ -57,15 +62,18 @@
                         </div>
                     </div>
 
+                    <!-- 5-Day forecast text -->
                     <p class="fiveDayText">5-Day Forecast</p>
 
-                    <!-- Five day cards -->
+                    <!-- 5 day cards -->
                     <div class="row fiveDay">
                         <!-- First day -->
                         <div class="card box col-md-2">
+                            <!-- Date -->
                             <div class="card-header">
                               Fri, morn
                             </div>
+                            <!-- Forecast -->
                             <div class="card-body">
                               <blockquote class="blockquote mb-0">
                                 <p>Temp:</p>
@@ -76,9 +84,11 @@
 
                         <!-- Second day -->
                         <div class="card box col-md-2">
+                            <!-- Date -->
                             <div class="card-header">
                               Fri, morn
                             </div>
+                            <!-- Forecast -->
                             <div class="card-body">
                               <blockquote class="blockquote mb-0">
                                 <p>Temp:</p>
@@ -89,9 +99,11 @@
 
                         <!-- Third day -->
                         <div class="card box col-md-2">
+                            <!-- Date -->
                             <div class="card-header">
                               Fri, morn
                             </div>
+                            <!-- Forecast -->
                             <div class="card-body">
                               <blockquote class="blockquote mb-0">
                                 <p>Temp:</p>
@@ -102,9 +114,11 @@
 
                         <!-- Forth day -->
                         <div class="card box col-md-2">
+                            <!-- Date -->
                             <div class="card-header">
                               Fri, morn
                             </div>
+                            <!-- Forecast -->
                             <div class="card-body">
                               <blockquote class="blockquote mb-0">
                                 <p>Temp:</p>
@@ -115,9 +129,11 @@
 
                         <!-- Fifth day -->
                         <div class="card box col-md-2">
+                            <!-- Date -->
                             <div class="card-header">
                               Fri, morn
                             </div>
+                            <!-- Forecast -->
                             <div class="card-body">
                               <blockquote class="blockquote mb-0">
                                 <p>Temp:</p>
@@ -137,13 +153,17 @@
                 </div>
             </div>
 
+            <!-- Error -->
             <p class="error hide">placeholder</p>
 
+            <!-- Previous choices/Possible choices title -->
             <p class="previousChoices">Previous searches</p>
+            <!-- Row for the buttons -->
             <div class="row choiceRow">
             </div>
         </div>
 
+        <!-- Footer -->
         <footer>
             <p>Made with &hearts; in SLC.</p>
             <p id="copy">&copy; Copyright 2020.</p>
