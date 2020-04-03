@@ -50,12 +50,29 @@ main h2 {
     font-size: 50px;
 }
 
+hr {
+    background-color: #444;
+    border: none;
+    height: 2px;
+}
+
 .card {
     border: 3px solid #444;
 }
 
 .card-body {
     padding: 1.04rem;
+}
+
+.box {
+    padding: 0;
+    width: 100%;
+    margin-right: 20px;
+    box-shadow: 6px 5px 1px -3px #444;
+}
+
+.boxContainer {
+    flex-direction: row;
 }
 
 .container-fluid {
@@ -92,6 +109,10 @@ main h2 {
 .row {
     justify-content: center;
     margin-bottom: 35px;
+}
+
+.fiveDay {
+    margin: 0;
 }
 
 .cityBtn {
