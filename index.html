@@ -14,11 +14,12 @@
 
     <body>
         <!-- Navbar/Header -->
-        <nav class="navbar navbar-dark bg-dark">
+        <nav class="navbar navbar-dark bg-dark switch">
             <a class="navbar-brand" href="https://hockeyduck3.github.io/Portfolio">LJ Spencer</a>
+            <p class="dateTime"></p>
         </nav>
 
-        <h2 class="dateTime"></h2>
+        <h2 class="greetingText hide">Welcome! Let's check the weather.</h2>
         
         <div class="container-fluid">
             <!-- Main body -->
@@ -28,7 +29,28 @@
 
                     <hr class="line">
 
-                    <p>Current temp: <span>11.61°C</span></p>
+                    <!-- Current temp data -->
+                    <div class="row">
+                        <!-- Current temps -->
+                        <div class="card col-md-5">
+                            <div class="card-body">
+                                <p>Temperapture: </p>
+                                <p>Feels Like:</p>
+                                <p>Low:</p>
+                                <p>High:</p>
+                            </div>
+                        </div>
+
+                        <!-- Other data -->
+                        <div class="card col-md-5">
+                            <div class="card-body">
+                                <p>Humidity: </p>
+                                <p>Wind Speed:</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="fiveDayText">5-Day Forecast</p>
 
                     <!-- Five day cards -->
                     <div class="row fiveDay">
