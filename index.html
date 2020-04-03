@@ -14,16 +14,23 @@
 
     <body>
         <!-- Navbar/Header -->
-        <nav class="navbar navbar-dark bg-dark switch">
+        <nav class="navbar navbar-dark bg-dark">
             <a class="navbar-brand" href="https://hockeyduck3.github.io/Portfolio">LJ Spencer</a>
             <p class="dateTime"></p>
+            <!-- Navbar Searchbar -->
+            <div class="input-group navSearch hide">
+                <input type="text" class="form-control form-control2" placeholder="Search another city" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary searchBtn" type="submit" id="button-addon2">Search</button>
+                </div>
+            </div>
         </nav>
 
-        <h2 class="greetingText hide">Welcome! Let's check the weather.</h2>
+        <h2 class="greetingText">Welcome! Let's check the weather.</h2>
         
         <div class="container-fluid">
             <!-- Main body -->
-            <main class="card">
+            <main class="card hide">
                 <section class="card-body">
                     <h2>Salt Lake City</h2>
 
@@ -124,15 +131,15 @@
             </main>
 
             <!-- Search Bar -->
-            <div class="input-group mb-3 hide">
+            <div class="input-group">
                 <input type="text" class="form-control" placeholder="City Name or Zip Code" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary searchBtn" type="submit" id="button-addon2">Search</button>
                 </div>
             </div>
 
-            <p class="previousChoices hide">Previous searches</p>
-            <div class="row hide">
+            <p class="previousChoices">Previous searches</p>
+            <div class="row">
                 <button type="button" class="btn btn-secondary cityBtn">Salt Lake City</button>
                 <button type="button" class="btn btn-secondary cityBtn">Tampa Bay</button>
                 <button type="button" class="btn btn-secondary cityBtn">San Francisco</button>
