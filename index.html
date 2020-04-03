@@ -22,25 +22,95 @@
         
         <div class="container-fluid">
             <!-- Main body -->
-            <main class="card hide">
+            <main class="card">
                 <section class="card-body">
-                    <h2>Weather</h2>
+                    <h2>Salt Lake City</h2>
 
                     <hr class="line">
+
+                    <p>Current temp: <span>11.61°C</span></p>
+
+                    <!-- Five day cards -->
+                    <div class="row fiveDay">
+                        <!-- First day -->
+                        <div class="card box col-md-2">
+                            <div class="card-header">
+                              Fri, morn
+                            </div>
+                            <div class="card-body">
+                              <blockquote class="blockquote mb-0">
+                                <p>Temp:</p>
+                                <p>Wind:</p>
+                              </blockquote>
+                            </div>
+                        </div>
+
+                        <!-- Second day -->
+                        <div class="card box col-md-2">
+                            <div class="card-header">
+                              Fri, morn
+                            </div>
+                            <div class="card-body">
+                              <blockquote class="blockquote mb-0">
+                                <p>Temp:</p>
+                                <p>Wind:</p>
+                              </blockquote>
+                            </div>
+                        </div>
+
+                        <!-- Third day -->
+                        <div class="card box col-md-2">
+                            <div class="card-header">
+                              Fri, morn
+                            </div>
+                            <div class="card-body">
+                              <blockquote class="blockquote mb-0">
+                                <p>Temp:</p>
+                                <p>Wind:</p>
+                              </blockquote>
+                            </div>
+                        </div>
+
+                        <!-- Forth day -->
+                        <div class="card box col-md-2">
+                            <div class="card-header">
+                              Fri, morn
+                            </div>
+                            <div class="card-body">
+                              <blockquote class="blockquote mb-0">
+                                <p>Temp:</p>
+                                <p>Wind:</p>
+                              </blockquote>
+                            </div>
+                        </div>
+
+                        <!-- Fifth day -->
+                        <div class="card box col-md-2">
+                            <div class="card-header">
+                              Fri, morn
+                            </div>
+                            <div class="card-body">
+                              <blockquote class="blockquote mb-0">
+                                <p>Temp:</p>
+                                <p>Wind:</p>
+                              </blockquote>
+                            </div>
+                        </div>
+                    </div>
 
                 </section>
             </main>
 
             <!-- Search Bar -->
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 hide">
                 <input type="text" class="form-control" placeholder="City Name or Zip Code" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary searchBtn" type="submit" id="button-addon2">Search</button>
                 </div>
             </div>
 
-            <p class="previousChoices">Previous searches</p>
-            <div class="row">
+            <p class="previousChoices hide">Previous searches</p>
+            <div class="row hide">
                 <button type="button" class="btn btn-secondary cityBtn">Salt Lake City</button>
                 <button type="button" class="btn btn-secondary cityBtn">Tampa Bay</button>
                 <button type="button" class="btn btn-secondary cityBtn">San Francisco</button>
