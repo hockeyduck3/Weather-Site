@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group, .previousChoices {
+h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText {
     font-family: 'Yellowtail', cursive;
 }
 
@@ -27,17 +27,16 @@ h2, .navbar-brand, .input-group, .previousChoices {
 
 .navbar-brand {
     font-size: 30px;
-    margin: 0 auto;
+    margin-left: 25px;
+    justify-content: start;
     padding: 20px 0px;
 }
 
 .dateTime {
-    font-size: 50px;
-    margin: 50px auto 0 auto;
+    color: white;
+    font-size: 20px;
     letter-spacing: 3px;
-    padding: 15px;
-    padding-right: 25px;
-    border: #444 solid 2px;
+    margin: 0 25px;
 }
 
 /* Main */
@@ -54,6 +53,12 @@ hr {
     background-color: #444;
     border: none;
     height: 2px;
+}
+
+.greetingText {
+    margin-top: 50px;
+    font-size: 50px;
+    text-align: center;
 }
 
 .card {
@@ -78,6 +83,16 @@ hr {
 .container-fluid {
     padding-left: 0;
     padding-right: 0;
+    margin: 0px auto 30px auto;
+}
+
+.col-md-5 {
+    margin-right: 30px;
+}
+
+.fiveDayText {
+    font-size: 30px;
+    margin-left: 4.5%;
 }
 
 .form-control {
