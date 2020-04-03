@@ -138,14 +138,25 @@ hr {
     margin-right: 15px;
 }
 
-.input-group {
+.firstSearch {
     width: 95%;
-    margin: 45px auto;
+    margin: 45px auto 25px auto;
 }
 
 .navSearch {
     width: 400px;
     margin: 0 15px 0 0;
+}
+
+.error {
+    border: 2px solid red;
+    border-radius: 1rem;
+    color: red;
+    font-size: 20px;
+    margin: 15px auto; 
+    padding: 15px;
+    text-align: center;
+    width: 40%;
 }
 
 .hide {
