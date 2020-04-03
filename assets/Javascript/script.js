@@ -1,13 +1,10 @@
-$('.dateTime').text(moment().format('llll'))
-
-setInterval(function() {
-    $('.dateTime').text(moment().format('llll'))
-}, 1000)
-
 var cityVal;
 var queryURL;
-
+var prevSearches = [];
 var errorMes = $('.error');
+var name;
+
+load();
 
 $('.searchBtn').click(function() {
     cityVal = $('.searchBar').val().trim();
@@ -23,9 +20,7 @@ $('.searchBtn').click(function() {
         searchCity();
     } else {
         errorMes.text('Text cannot be read').slideDown('600');
-    }
-
-    
+    }  
 })
 
 $('.firstSearch').on('keypress', function() {
@@ -39,12 +34,63 @@ function searchCity() {
     }).then(function(response) {
         console.log(response);
 
-        $('.cityName').text(response.name);
+        name = response.name;
+
+        $('.cityName').text(name);
         $('.greetingText, .firstSearch, .previousChoices, .choiceRow').hide();
         $('.card').fadeIn('slow');
-        $('.navSearch').removeClass('hide')
+        $('.navSearch').removeClass('hide');
+        addToList();
     }).catch(function(error) {
         console.log(error)
         errorMes.text(`Error ${error.responseJSON.cod} ${error.responseJSON.message}`).slideDown('600')
     })
+}
+
+function load() {
+    $('.dateTime').text(moment().format('llll'))
+
+    setInterval(function() {
+        $('.dateTime').text(moment().format('llll'))
+    }, 1000)
+
+    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
+        prevSearches = ['Salt Lake City', 'Tampa Bay', 'San Francisco', 'Houston'];
+
+        $('.previousChoices').text('Possible Choices')
+
+        $(prevSearches).each(function(e) {
+            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+            $('.choiceRow').append(button);
+        })
+    } else {
+        prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
+
+        $(prevSearches).each(function(e) {
+            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+            $('.choiceRow').append(button);
+        })
+    }
+}
+
+function addToList() {
+    console.log(prevSearches.indexOf(name));
+
+    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
+        prevSearches = [];
+
+        prevSearches.push(name);
+
+        localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+    } else if (prevSearches.indexOf(name) === -1) {
+        if (prevSearches.length >= 4) {
+            prevSearches.pop();
+
+            prevSearches.unshift(name);
+        } else {
+            prevSearches.unshift(name);
+        }
+
+        localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+    }
 }
