@@ -11,18 +11,13 @@ load();
 
 // When the search button is clicked
 $('.searchBtn, .searchBtn2').click(function(event) {
-    console.log(event.target)
+    if ($(event.target).hasClass('searchBtn2')) {
+        // Set the var of which to 'navSearch'
+        which = 'navSearch';
+    }
 
     // Trigger searchbar function
     grabCityVal();
-});
-
-$('.searchBtn2').click(function() {
-    which = 'navSearch';
-
-    // Trigger searchbar function
-    grabCityVal();
-
 });
 
 // This function will check and see if the user clicked the 'Enter' key
