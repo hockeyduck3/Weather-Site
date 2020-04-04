@@ -4,27 +4,64 @@ var queryURL;
 var prevSearches = [];
 var errorMes = $('.error');
 var name;
+var which = 'firstSearch';
 
 // Trigger the load function
 load();
 
 // When the search button is clicked
-$('.searchBtn').click(searchBar);
+$('.searchBtn, .searchBtn2').click(function(event) {
+    console.log(event.target)
+
+    // Trigger searchbar function
+    grabCityVal();
+});
+
+$('.searchBtn2').click(function() {
+    which = 'navSearch';
+
+    // Trigger searchbar function
+    grabCityVal();
+
+});
 
 // This function will check and see if the user clicked the 'Enter' key
-$('.firstSearch').on('keypress', function(event) {
-    // If the 'Enter' key is clicked then run the searchBar function
-    if (event.keyCode === 13) {
-        searchBar();
+$('.firstSearch, .navSearch').on('keypress', function(event) {
+    
+    if ($(event.target).hasClass('searchBar')) {
+        // If the 'Enter' key is clicked then run the searchBar function
+        if (event.keyCode === 13) {
+            // Trigger grabCityVal function
+            grabCityVal();
+        } 
+        // If the 'Enter' key was not clicked then remove any errors on the screen
+        else {
+            error();  
+        }
     } 
-    // If the 'Enter' key was not clicked then remove any errors on the screen
+
     else {
-        error();  
+        //If the 'Enter' key is clicked then run the searchBar function
+        if (event.keyCode === 13) {
+            // Set the var of which to 'navSearch'
+            which = 'navSearch';
+
+            grabCityVal()
+        }
+
+        // If the 'Enter' key was not clicked then remove any errors on the screen
+        else {
+            error();  
+        }
     }
 })
 
 // Function for the city buttons
 $('.cityBtn').click(function() {
+    // Set the variable which to navSearch since the first search bar will no longer be in use
+    which = 'navSearch';
+
+    // Set the cityVal to the text of which ever button clicked it, set the queryURL, then trigger the searchCity function.
     cityVal = $(this).text();
     queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
     searchCity();
@@ -74,21 +111,50 @@ function load() {
     }
 }
 
+// This function will grab either the value from the first searchBar or the second one
+function grabCityVal() {
+    // The var which will tell the code which one to look for
+
+    // If the var which is set to 'firstSearch'
+    if (which === 'firstSearch') {
+        // Grab the value from the search bar and trim the whitespaces off of it
+        cityVal = $('.searchBar').val().trim();
+
+    } 
+
+    // Otherwise
+    else {
+        // Grab the value from the nav search bar and trim the whitespaces off of it
+        cityVal = $('.searchBar2').val().trim();
+    }
+
+    searchBar();
+}
+
 // Function for when either of the searchbars are in use
 function searchBar() {
-    // Grab the value from the search bar and trim the whitespaces off of it
-    cityVal = $('.searchBar').val().trim();
-
     // cityVal is empty
     if (cityVal === '') {
         // Display this error message
-        errorMes.text('Field cannot be empty').slideDown('600');
+        errorMes.text('Field cannot be empty');
+        
+        if (which == 'firstSearch') {
+            $('.mainError').slideDown('600');
+        } else {
+            $('.error2').slideDown('600');
+        }
     }
 
     // If cityVal is not empty, then this will check and see if there is both a city name and a zipcode in the search bar.
     else if (cityVal.match(/[a-z]/) && cityVal.match(/[0-9]/)) {
         // If there is both a city name and a zip code, then this error message will display.
-        errorMes.text('Please only search for a city or zip').slideDown('600');
+        errorMes.text('Please only search for a city or zip');
+
+        if (which == 'firstSearch') {
+            $('.mainError').slideDown('600');
+        } else {
+            $('.error2').slideDown('600');
+        }
     }
 
     // If neither error messages are displayed, then this will check and see if cityVal is a city. 
@@ -112,7 +178,13 @@ function searchBar() {
     // If cityVal's value is just special characters for example
     else {
         // Then this error message will display
-        errorMes.text('Text cannot be read').slideDown('600');
+        errorMes.text('Text cannot be read');
+
+        if (which == 'firstSearch') {
+            $('.mainError').slideDown('600');
+        } else {
+            $('.error2').slideDown('600');
+        }
     }  
 }
 
@@ -154,7 +226,13 @@ function searchCity() {
         console.log(error)
 
         // Display what the error was to the user
-        errorMes.text(`Error ${error.responseJSON.cod}: ${error.responseJSON.message}`).slideDown('600')
+        errorMes.text(`Error ${error.responseJSON.cod}: ${error.responseJSON.message}`);
+
+        if (which == 'firstSearch') {
+            $('.mainError').slideDown('600');
+        } else {
+            $('.error2').slideDown('600');
+        }
     })
 }
 
@@ -210,5 +288,5 @@ function addToList() {
 }
 
 function error() {
-    errorMes.slideUp('600'); 
+    errorMes.slideUp('600');
 }
