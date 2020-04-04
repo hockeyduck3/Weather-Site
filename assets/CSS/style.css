@@ -115,6 +115,10 @@ hr {
     width: 120px;
 }
 
+.searchBtn2 {
+    width: 100px;
+}
+
 /* Styling for the buttons */
 .btn {
     background-color: #444;
@@ -159,7 +163,7 @@ hr {
     width: 400px;
 }
 
-.error {
+.error, .error2 {
     border-radius: 1rem;
     border: 2px solid red;
     color: red;
@@ -168,6 +172,13 @@ hr {
     padding: 15px;
     text-align: center;
     width: 40%;
+}
+
+.error2 {
+    align-self: flex-end;
+    font-size: 15px;
+    margin: 10px 15px 0 0;
+    width: 400px;
 }
 
 .hide {
