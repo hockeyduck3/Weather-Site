@@ -9,7 +9,73 @@ var name;
 load();
 
 // When the search button is clicked
-$('.searchBtn').click(function() {
+$('.searchBtn').click(searchBar);
+
+// This function will check and see if the user clicked the 'Enter' key
+$('.firstSearch').on('keypress', function(event) {
+    // If the 'Enter' key is clicked then run the searchBar function
+    if (event.keyCode === 13) {
+        searchBar();
+    } 
+    // If the 'Enter' key was not clicked then remove any errors on the screen
+    else {
+        error();  
+    }
+})
+
+// Function for the city buttons
+$('.cityBtn').click(function() {
+    cityVal = $(this).text();
+    queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+    searchCity();
+})
+
+// Load function
+function load() {
+    // Set the date and time text to the current date and time via moment.js
+    $('.dateTime').text(moment().format('llll'))
+
+    // This interval will make sure that the date and time is always up to date
+    setInterval(function() {
+        $('.dateTime').text(moment().format('llll'))
+    }, 1000)
+
+    // This if statement will check and see if the user has not done any previous searches
+    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
+        // If the above if statement is true then the prevSearches array will be set to this default list
+        prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
+
+        // The text of previous searches will be set to 'Possible choices' 
+        $('.previousChoices').text('Possible choices');
+
+        // Then this function will go in and create buttons based on the prevSearches array
+        $(prevSearches).each(function(e) {
+            // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
+            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+
+            // Append the newly made buttons to .choiceRow
+            $('.choiceRow').append(button);
+        })
+    } 
+
+    //If the user has made previous searches 
+    else {
+        // The prevSearchs array will be set to the saved array in the user's local storage
+        prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
+
+        // Then this function will make buttons based off of the users
+        $(prevSearches).each(function(e) {
+            // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
+            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+            
+            // Then appened the newly made button to .choiceRow
+            $('.choiceRow').append(button);
+        })
+    }
+}
+
+// Function for when either of the searchbars are in use
+function searchBar() {
     // Grab the value from the search bar and trim the whitespaces off of it
     cityVal = $('.searchBar').val().trim();
 
@@ -48,15 +114,13 @@ $('.searchBtn').click(function() {
         // Then this error message will display
         errorMes.text('Text cannot be read').slideDown('600');
     }  
-})
-
-// This function will remove any error message if it's displayed
-$('.firstSearch').on('keypress', function() {
-    errorMes.slideUp('600');
-})
+}
 
 // Search city function
 function searchCity() {
+    // Just in case if the error is still on the screen run the error function
+    error();
+
     // Make an ajax request to openweather api
     $.ajax({
         url: queryURL,
@@ -94,57 +158,12 @@ function searchCity() {
     })
 }
 
-// Load function
-function load() {
-    // Set the date and time text to the current date and time via moment.js
-    $('.dateTime').text(moment().format('llll'))
-
-    // This interval will make sure that the date and time is always up to date
-    setInterval(function() {
-        $('.dateTime').text(moment().format('llll'))
-    }, 1000)
-
-    // This if statement will check and see if the user has not done any previous searches
-    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
-        // If the above if statement is true then the prevSearches array will be set to this default list
-        prevSearches = ['Salt Lake City', 'Tampa Bay', 'San Francisco', 'Houston'];
-
-        // The text of previous searches will be set to 'Possible choices' 
-        $('.previousChoices').text('Possible choices');
-
-        // Then this function will go in and create buttons based on the prevSearches array
-        $(prevSearches).each(function(e) {
-            // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
-            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
-
-            // Append the newly made buttons to .choiceRow
-            $('.choiceRow').append(button);
-        })
-    } 
-
-    //If the user has made previous searches 
-    else {
-        // The prevSearchs array will be set to the saved array in the user's local storage
-        prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
-
-        // Then this function will make buttons based off of the users
-        $(prevSearches).each(function(e) {
-            // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
-            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
-            
-            // Then appened the newly made button to .choiceRow
-            $('.choiceRow').append(button);
-        })
-    }
-}
-
 // Function for saving user's previous searches
 function addToList() {
     // This will check and see if the user has made any previous searches
     if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
-        // If the user has not made any previous searches
-
-        // prevSearches will be set to an empty array
+        /*If the user has not made any previous searches
+        prevSearches will be set to an empty array */
         prevSearches = [];
 
         // Then the user's latest search will be added to the prevSearches arrray
@@ -153,8 +172,9 @@ function addToList() {
         // Then set the item into the user's local storage using JSON's stringify method
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
     } 
+    
     /* If the user had made previous searches before then this else if statement will check and see if the latest search is already saved in the list. 
-    if it is already saved then nothing will happen. This is to prevent the same city from showing up more than once on the previous searches list. */
+    if it is already saved then the bottom else statement will run. This is to prevent the same city from showing up more than once on the previous searches list. */
     else if (prevSearches.indexOf(name) === -1) {
         // If the city is not on the list, then this if statement will check and see if the prevSearches array is at 4 or more than 4.
         if (prevSearches.length >= 4) {
@@ -173,5 +193,22 @@ function addToList() {
 
         // Then after all of that is done, save prevSearches to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+    } 
+
+    /* If the user has made a previous searches and the user searches for the same city 
+    This else statement will run and make sure that the users latest search is always first in the array*/
+    else {
+        // This will slice out the city from within the array
+        prevSearches.splice(prevSearches.indexOf(name), 1);
+
+        // Then after it slices it, it will re-add the item to the front of the array
+        prevSearches.unshift(name);
+
+        // Then save to the local storage using JSON stringify
+        localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
     }
+}
+
+function error() {
+    errorMes.slideUp('600'); 
 }
