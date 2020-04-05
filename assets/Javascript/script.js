@@ -1,6 +1,7 @@
 // Variables needed
 var cityVal;
 var queryURL;
+var fiveDayURL;
 var prevSearches = [];
 var errorMes = $('.error');
 var name;
@@ -56,9 +57,10 @@ $('.cityBtn').click(function() {
     // Set the variable which to navSearch since the first search bar will no longer be in use
     which = 'navSearch';
 
-    // Set the cityVal to the text of which ever button clicked it, set the queryURL, then trigger the searchCity function.
+    // Set the cityVal to the text of which ever button clicked it, set the queryURL and fiveDayURL, then trigger the searchCity function.
     cityVal = $(this).text();
     queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+    fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
     searchCity();
 })
 
@@ -121,6 +123,7 @@ function grabCityVal() {
     else {
         // Grab the value from the nav search bar and trim the whitespaces off of it
         cityVal = $('.searchBar2').val().trim();
+        $('.searchBar2').val('')
     }
 
     searchBar();
@@ -154,8 +157,9 @@ function searchBar() {
 
     // If neither error messages are displayed, then this will check and see if cityVal is a city. 
     else if (cityVal.match(/[a-z]/)) {
-        // If it is, then the queryURL will search by city name
+        // If it is, then the queryURL and fiveDayURL will search by city name
         queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
         // Then trigger the searchCity function
         searchCity();
@@ -163,8 +167,9 @@ function searchBar() {
 
     // This will check and see if cityVal is a zip code 
     else if (cityVal.match(/[0-9]/)) {
-        // If it is, then the querURL will search by zip code instead
+        // If it is, then the queryURL and fiveDayURL will search by zip code instead
         queryURL = `https://api.openweathermap.org/data/2.5/weather?zip=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?zip=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
         // Then trigger the searchCity function
         searchCity();
@@ -212,8 +217,49 @@ function searchCity() {
         // Remove the class of hide from the searchbar in the nav
         $('.navSearch').removeClass('hide');
 
+        // Set the text of description to the OpenWeather description
+        $('.description').text(response.weather[0].main);
+
+        // Set the src of icon to the icon from OpenWeather
+        $('.icon').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
+        
+        // Set the text of each item to data collected from the OpenWeather api
+        $('.temp').text(`Temperature: ${Math.round(response.main.temp)} °F`);
+        $('.feels').text(`Feels like: ${Math.round(response.main.feels_like)} °F`);
+        $('.low').text(`Low of: ${Math.round(response.main.temp_min)} °F`);
+        $('.high').text(`High of: ${Math.round(response.main.temp_max)} °F`);
+        $('.humidity').text(`Humidity: ${response.main.humidity}%`);
+        $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} m/h`);
+        $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
+
         // Trigger addToList function
         addToList();
+
+        // Ajax request for the 5 day forecast
+        $.ajax({
+            url: fiveDayURL,
+            method: 'GET'
+        }).then(function(fiveReponse) {
+            // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
+            var numberList = [4, 12, 20, 28, 37];
+
+            for (var i = 0; i < numberList.length; i++) {
+                // Index is set to the index of numberList[i]
+                var index = numberList[i];
+
+                // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
+                var unixTime = (fiveReponse.list[index].dt_txt).slice(0, 10);
+
+                // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
+                var dateText = moment(unixTime).format("ddd, MMM Do");
+                
+                // Assign the dateText var to date0, 1, 2, 3, 4
+                $(`.date${i}`).text(dateText);
+
+                // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
+                $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[index].weather[0].icon}@2x.png`);
+            }
+        })
 
         // If the ajax request fails
     }).catch(function(error) {
