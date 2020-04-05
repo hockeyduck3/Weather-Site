@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText {
+h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText {
     font-family: 'Yellowtail', cursive;
 }
 
@@ -73,10 +73,36 @@ hr {
 /* Styling for the cards */
 .card {
     border: 3px solid #444;
+    padding: 0;
 }
 
-.card-body {
-    padding: 1.04rem;
+/* Icon row styling */
+.iconRow {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+/* Styling for the icon in the current forecast */
+.icon {
+    background-color: rgb(172, 172, 172);
+    border-radius: 8px;
+    width: 70px;
+    margin-left: 10px;
+}
+
+/* Styling for the icons in the 5-day forecast */
+.icon2 {
+    background-color: rgb(172, 172, 172);
+    border-radius: 5px;
+    margin-right: 4px;
+    margin-top: 6px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 35px;
 }
 
 /* Styling for the 5-Day forecast */
@@ -95,9 +121,9 @@ hr {
     margin-right: 30px;
 }
 
-.fiveDayText {
+.fiveDayText, .currentDayText {
     font-size: 30px;
-    margin-left: 4.5%;
+    margin-left: 5%;
 }
 
 /* Styling for the searchbars */
