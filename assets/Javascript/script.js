@@ -218,7 +218,8 @@ function searchCity() {
         $('.navSearch').removeClass('hide');
 
         // Set the text of description to the OpenWeather description
-        $('.description').text(response.weather[0].main);
+        var descText = (response.weather[0].description.charAt(0).toUpperCase() + response.weather[0].description.substr(1).toLowerCase())
+        $('.description').text(descText);
 
         // Set the src of icon to the icon from OpenWeather
         $('.icon').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
@@ -228,6 +229,7 @@ function searchCity() {
         $('.feels').text(`Feels like: ${Math.round(response.main.feels_like)} °F`);
         $('.low').text(`Low of: ${Math.round(response.main.temp_min)} °F`);
         $('.high').text(`High of: ${Math.round(response.main.temp_max)} °F`);
+        $('.cloud').text(`Cloud percentage: ${response.clouds.all}%`);
         $('.humidity').text(`Humidity: ${response.main.humidity}%`);
         $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} m/h`);
         $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
@@ -243,6 +245,7 @@ function searchCity() {
             // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
             var numberList = [4, 12, 20, 28, 37];
 
+            // Loop through the five day forecast 
             for (var i = 0; i < numberList.length; i++) {
                 // Index is set to the index of numberList[i]
                 var index = numberList[i];
@@ -258,6 +261,10 @@ function searchCity() {
 
                 // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
                 $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[index].weather[0].icon}@2x.png`);
+
+                $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[index].main.temp)} °F`);
+                $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[index].wind.speed).toFixed(1)} m/h`);
+                $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[index].main.humidity}%`);
             }
         })
 
