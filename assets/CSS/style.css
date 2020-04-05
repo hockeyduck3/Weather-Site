@@ -228,6 +228,30 @@ blockquote p {
     width: 400px;
 }
 
+/* Styling for the setting buttons */
+.settingsBtn1 {
+    background-color: rgb(221, 221, 221);
+    border: none;
+    margin-bottom: 75px;
+    margin-right: 0px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.settingsBtn2 {
+    background-color: white;
+    border: none;
+    margin: 2% 2%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.settingsBtn1:focus, .settingsBtn2:focus {
+    outline: none;
+}
+
 /* Using this to hide things initially, then using jQuery to hide the rest */
 .hide {
     display: none;
