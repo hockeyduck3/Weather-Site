@@ -87,6 +87,10 @@ blockquote p {
     padding: 0;
 }
 
+.card-body {
+    padding-top: 5px;
+}
+
 /* Icon row styling */
 .iconRow {
     position: absolute;
