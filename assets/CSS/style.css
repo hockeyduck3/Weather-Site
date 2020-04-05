@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText {
+h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText, .dateTime {
     font-family: 'Yellowtail', cursive;
 }
 
@@ -36,7 +36,7 @@ h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText
 /* Moment.js display */
 .dateTime {
     color: white;
-    font-size: 20px;
+    font-size: 30px;
     letter-spacing: 3px;
     margin: 0 25px 0 250px;
 }
