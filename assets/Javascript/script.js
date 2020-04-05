@@ -209,7 +209,7 @@ function searchCity() {
         $('.cityName').text(name);
         
         //Hide the welcome screen 
-        $('.greetingText, .firstSearch, .previousChoices, .choiceRow').hide();
+        $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').hide();
 
         // Fade in the results
         $('.card').fadeIn('slow');
