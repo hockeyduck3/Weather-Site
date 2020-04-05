@@ -57,6 +57,17 @@ hr {
     height: 2px;
 }
 
+p {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+/* Changing the font size on the 5-Day forecast p tags */
+blockquote p {
+    font-size: 18px;
+}
+
 .container-fluid {
     margin: 0px auto 30px auto;
     padding-left: 0;
@@ -117,8 +128,13 @@ hr {
     flex-direction: row;
 }
 
-.col-md-5 {
-    margin-right: 30px;
+.col-md-6 {
+    margin-right: 50px;
+    box-shadow: 6px 5px 1px -3px #444;
+}
+
+.col-md-3 {
+    box-shadow: 6px 5px 1px -3px #444;
 }
 
 .fiveDayText, .currentDayText {
@@ -189,6 +205,7 @@ hr {
     width: 400px;
 }
 
+/* Styling for the error's */
 .error, .error2 {
     border-radius: 1rem;
     border: 2px solid red;
@@ -207,6 +224,7 @@ hr {
     width: 400px;
 }
 
+/* Using this to hide things initially, then using jQuery to hide the rest */
 .hide {
     display: none;
 }
@@ -223,8 +241,8 @@ footer {
 }
 
 footer p{
-    margin: 1px 0 0 0;
-    padding: 5px 0 0 2px;
+    margin: 0;
+    /* padding: 5px 0 0 2px; */
 }
 
 /* Media */
