@@ -33,6 +33,30 @@
 
         <!-- Welcome text -->
         <h2 class="greetingText">Welcome! Let's check the weather.</h2>
+
+        <!-- Modal for the settings page -->
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <!-- Modal header -->
+              <div class="modal-header">
+                <h4 class="settingsHeader">Settings</h4>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                <p>body</p>
+              </div>
+
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn-secondary closeBtn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn-primary saveBtn" data-dismiss="modal">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
         
         <!-- Main body -->
         <div class="container-fluid">
@@ -41,6 +65,11 @@
                 <section class="card-body">
                   <!-- Name of the city will get added here from the javascript -->
                     <h2 class="cityName">City Name</h2>
+
+                    <!-- Settings button that shows up on the forecast page -->
+                    <button type="button" class="settingsBtn2" data-toggle="modal" data-target="#myModal">
+                      <i class="fas fa-cog fa-2x"></i>
+                    </button>
 
                     <hr class="line">
 
@@ -194,14 +223,24 @@
             </div>
         </div>
 
+        <!-- Settings button that shows up on the welcome screen -->
+        <button type="button" class="settingsBtn1" data-toggle="modal" data-target="#myModal">
+          <i class="fas fa-cog fa-2x"></i>
+        </button>
+
         <!-- Footer -->
         <footer>
             <p>Made with &hearts; in SLC.</p>
             <p id="copy">&copy; Copyright 2020.</p>
         </footer>
 
+        <!-- Font Awesome link -->
+        <script src="https://kit.fontawesome.com/0a5e91de56.js" crossorigin="anonymous"></script>
         <!-- jQuery link -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <!-- Bootstrap JS links -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <!-- Moment.js link -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <!-- Link to the Javascript -->
