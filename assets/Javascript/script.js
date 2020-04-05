@@ -22,7 +22,7 @@ $('.searchBtn, .searchBtn2').click(function(event) {
 });
 
 // This function will check and see if the user clicked the 'Enter' key
-$('.firstSearch, .navSearch').on('keypress', function(event) {
+$('.firstSearch, .navSearch').on('keydown', function(event) {
     
     if ($(event.target).hasClass('searchBar')) {
         // If the 'Enter' key is clicked then run the searchBar function
@@ -217,8 +217,9 @@ function searchCity() {
         // Remove the class of hide from the searchbar in the nav
         $('.navSearch').removeClass('hide');
 
-        // Set the text of description to the OpenWeather description
-        var descText = (response.weather[0].description.charAt(0).toUpperCase() + response.weather[0].description.substr(1).toLowerCase())
+        // This variable is grabbing the description text from OpenWeather, and setting the first letter in the string to a capitol letter.
+        var descText = (response.weather[0].description.charAt(0).toUpperCase() + response.weather[0].description.substr(1).toLowerCase());
+        // Then setting descText to the text of description
         $('.description').text(descText);
 
         // Set the src of icon to the icon from OpenWeather
