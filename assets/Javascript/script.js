@@ -77,10 +77,11 @@ $('.cancelBtn').click(cancel);
 function load() {
     // Check and see if 'clock' is not in the local storage
     switch (localStorage.getItem('clock') === null) {
-        // If true then set 'clock' to 12 in the user's local storage, and set the timeForm variable to 12.
+        // If true then set 'clock' to 12 in the user's local storage, and set the timeForm variable to 12 and the momentFormat to 12-Hour format.
         case true:
             localStorage.setItem('clock', 12);
             timeForm == 12;
+            var momentFormat = moment().format('llll');
             break;
 
         // If 'clock' is set in the user's local storage
