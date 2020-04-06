@@ -172,7 +172,6 @@ blockquote p {
 
 /* Styling for the buttons */
 .btn {
-    background-color: #444;
     border-radius: 1rem;
     color: white;
     font-size: 25px;
@@ -266,12 +265,11 @@ blockquote p {
 }
 
 .cancelBtn {
-    background-color: #444;
     padding: 6px 17px 6px 10px;
 }
 
-/* This styling is for the active button state */
-.btn-secondary:not(:disabled):not(.disabled).active {
+/* Background color styling */
+.btn-secondary:not(:disabled):not(.disabled).active, .cancelBtn, .btn {
     background-color: #444;
 }
 
@@ -317,11 +315,13 @@ footer {
 
 footer p{
     margin: 0;
-    /* padding: 5px 0 0 2px; */
 }
 
 /* Media */
+
+/* Media for tablets */
 @media (max-width: 1024px) {
+    /* navBar styling */
     .dateTime{
         margin-left: 0;
     }
@@ -331,6 +331,7 @@ footer p{
         margin: 0 15px 10px 15px;
     }
 
+    /* Main styling */
     .row {
         width: 100%;
         margin: 0 auto;
@@ -358,7 +359,9 @@ footer p{
     }
 }
 
+/* Media for most phones */
 @media (max-width: 700px) {
+    /* Main styling */
     .container-fluid {
         margin-bottom: 0;
     }
@@ -387,6 +390,7 @@ footer p{
         font-size: 32px;
     }
 
+    /* Setting buttons styling */
     .settingsBtn1 {
         position: relative;
         margin-bottom: 15px;
@@ -396,6 +400,7 @@ footer p{
         margin: 12px 2%;
     }
 
+    /* Text styling */
     .fiveDayText, .currentDayText {
        margin-left: 0;
     }
@@ -404,7 +409,46 @@ footer p{
         display: none;
     }
 
+    /* Modal styling */
     .timeBtn, .unitBtn {
         font-size: 14px;
+    }
+}
+
+/* iPhone 5/SE */
+@media(max-width: 320px) {
+    /* Changed all of these font's to be just a tad smaller */
+    p {
+        font-size: 16px;
+    }
+
+    .dateTime, .greetingText {
+        font-size: 25px;
+    }
+
+    .error, .error2, .cancelBtn, .saveBtn {
+        font-size: 18px;
+    }
+
+    .form-control {
+        font-size: 20px;
+    }
+
+    .cityName {
+        font-size: 30px;
+    }
+
+    .timeBtn, .unitBtn, .timeFormText, .unitFormText {
+        font-size: 15px;
+    }
+
+    /* Changing the width to be 10px smaller */
+    .icon {
+        width: 60px;
+    }
+
+    /* Change up the margin on the second setting button */
+    .settingsBtn2 {
+        margin: 8px 4%;
     }
 }
