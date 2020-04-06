@@ -242,7 +242,7 @@ blockquote p {
 .settingsBtn2 {
     background-color: white;
     border: none;
-    margin: 2% 2%;
+    margin: 25px 2%;
     position: absolute;
     right: 0;
     top: 0;
@@ -284,6 +284,10 @@ blockquote p {
     margin-top: 5px;
     margin-right: 5px;
     font-size: 25px;
+}
+
+.unitFormText {
+    margin-right: 15px;
 }
 
 .unitRow {
