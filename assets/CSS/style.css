@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText, .dateTime, .closeBtn, .saveBtn {
+h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText, .dateTime, .cancelBtn, .saveBtn {
     font-family: 'Yellowtail', cursive;
 }
 
@@ -253,16 +253,16 @@ blockquote p {
 }
 
 /* Modal buttons styling */
-.closeBtn, .saveBtn {
+.cancelBtn, .saveBtn {
     border: none;
     font-size: 25px;
     padding: 6px;
     border-radius: 5px;
 }
 
-.closeBtn {
+.cancelBtn {
     background-color: #444;
-    padding: 6px 15px;
+    padding: 6px 17px 6px 10px;
 }
 
 /* This styling is for the active button state */
