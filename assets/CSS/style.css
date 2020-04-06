@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText, .dateTime {
+h2, .navbar-brand, .input-group, .previousChoices, .fiveDayText, .currentDayText, .dateTime, .closeBtn, .saveBtn {
     font-family: 'Yellowtail', cursive;
 }
 
@@ -250,6 +250,34 @@ blockquote p {
 
 .settingsBtn1:focus, .settingsBtn2:focus {
     outline: none;
+}
+
+/* Modal buttons styling */
+.closeBtn, .saveBtn {
+    border: none;
+    font-size: 25px;
+    padding: 6px;
+    border-radius: 5px;
+}
+
+.closeBtn {
+    padding: 6px 15px;
+}
+
+
+/* Settings for the time settings */
+.timeBtn {
+    background-color: #8c9094;
+    border: none;
+    border-radius: 5px;
+    margin: 0 10px 0 5px;
+    font-size: 20px;
+}
+
+.timeFormText {
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 25px;
 }
 
 /* Using this to hide things initially, then using jQuery to hide the rest */
