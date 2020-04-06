@@ -64,6 +64,8 @@ $('.cityBtn').click(function() {
     searchCity();
 })
 
+$('.timeBtn').click(activeBtn)
+
 // Load function
 function load() {
     // Set the date and time text to the current date and time via moment.js
@@ -333,6 +335,25 @@ function addToList() {
 
         // Then save to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+    }
+}
+
+// Setting button functions
+function activeBtn() {
+    if ($(this).hasClass('12HourBtn')) {
+        if ($(this).hasClass('active')) {
+            return;
+        } else {
+            $('.24HourBtn').removeClass('active');
+            $('.12HourBtn').addClass('active');
+        }
+    } else {
+        if ($(this).hasClass('active')) {
+            return;
+        } else {
+            $('.12HourBtn').removeClass('active');
+            $('.24HourBtn').addClass('active');
+        }
     }
 }
 
