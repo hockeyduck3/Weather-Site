@@ -15,7 +15,7 @@ var unitSpeed;
 load();
 
 // When the search button is clicked
-$('.searchBtn, .searchBtn2').click(function(event) {
+$('.searchBtn, .searchBtn2').click(function (event) {
     if ($(event.target).hasClass('searchBtn2')) {
         // Set the var of which to 'navSearch'
         which = 'navSearch';
@@ -26,19 +26,19 @@ $('.searchBtn, .searchBtn2').click(function(event) {
 });
 
 // This function will check and see if the user clicked the 'Enter' key
-$('.firstSearch, .navSearch').on('keydown', function(event) {
-    
+$('.firstSearch, .navSearch').on('keydown', function (event) {
+
     if ($(event.target).hasClass('searchBar')) {
         // If the 'Enter' key is clicked then run the searchBar function
         if (event.keyCode === 13) {
             // Trigger grabCityVal function
             grabCityVal();
-        } 
+        }
         // If the 'Enter' key was not clicked then remove any errors on the screen
         else {
-            error();  
+            error();
         }
-    } 
+    }
 
     else {
         //If the 'Enter' key is clicked then run the searchBar function
@@ -51,13 +51,13 @@ $('.firstSearch, .navSearch').on('keydown', function(event) {
 
         // If the 'Enter' key was not clicked then remove any errors on the screen
         else {
-            error();  
+            error();
         }
     }
 })
 
 // Function for the city buttons
-$('.cityBtn').click(function() {
+$('.cityBtn').click(function () {
     // Set the variable which to navSearch since the first search bar will no longer be in use
     which = 'navSearch';
 
@@ -82,7 +82,7 @@ function load() {
             localStorage.setItem('clock', 12);
             timeForm == 12;
             break;
-        
+
         // If 'clock' is set in the user's local storage
         default:
             // Set the timeForm variable to what it is in the local storage
@@ -98,7 +98,7 @@ function load() {
                     // And format the dateTime text to 24-Hour format
                     var momentFormat = moment().format("ddd, ll HH:mm");
                     break;
-                
+
                 // If it's set to 12 then format the dateTime text to 12-Hour format
                 default:
                     var momentFormat = moment().format('llll');
@@ -109,12 +109,12 @@ function load() {
     $('.dateTime').text(momentFormat);
 
     // This interval will make sure that the date and time is always up to date
-    setInterval(function() {
+    setInterval(function () {
         $('.dateTime').text(momentFormat);
     }, 1000);
 
     // Check and see if the user has not made any previous searches
-    switch(JSON.parse(localStorage.getItem('prevSearches')) === null) {
+    switch (JSON.parse(localStorage.getItem('prevSearches')) === null) {
         case true:
             // If the above switch statement is true then the prevSearches array will be set to this default list
             prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
@@ -123,7 +123,7 @@ function load() {
             $('.previousChoices').text('Possible choices');
 
             // Then this function will go in and create buttons based on the prevSearches array
-            $(prevSearches).each(function(e) {
+            $(prevSearches).each(function (e) {
                 // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
                 var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
 
@@ -138,10 +138,10 @@ function load() {
             prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
 
             // Then this function will make buttons based off of the users
-            $(prevSearches).each(function(e) {
+            $(prevSearches).each(function (e) {
                 // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
                 var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
-                
+
                 // Then appened the newly made button to .choiceRow
                 $('.choiceRow').append(button);
             })
@@ -156,11 +156,11 @@ function load() {
             unitTemp = '°F';
             unitSpeed = 'm/h';
             break;
-        
+
         // If the user does have 'unit' saved to their local storage
         default:
             // Check and see if the user prefers metric
-            switch (localStorage.getItem('unit') == 'metric'){
+            switch (localStorage.getItem('unit') == 'metric') {
                 // If true then change the unit variables to metric and makes the metric button active in the settings modal
                 case true:
                     unit = localStorage.getItem('unit');
@@ -187,7 +187,7 @@ function grabCityVal() {
     if (which === 'firstSearch') {
         // Grab the value from the search bar and trim the whitespaces off of it
         cityVal = $('.searchBar').val().trim();
-    } 
+    }
 
     // Otherwise
     else {
@@ -205,7 +205,7 @@ function searchBar() {
     if (cityVal === '') {
         // Display this error message
         errorMes.text('Field cannot be empty');
-        
+
         if (which == 'firstSearch') {
             $('.mainError').slideDown('600');
         } else {
@@ -255,7 +255,7 @@ function searchBar() {
         } else {
             $('.error2').slideDown('600');
         }
-    }  
+    }
 }
 
 // Search city function
@@ -263,7 +263,7 @@ function searchCity() {
     // Start the ajax call for the five day forcast
     fiveDayAjax();
     console.log(queryURL)
-    
+
     // Just in case if the error is still on the screen run the error function
     error();
 
@@ -272,7 +272,7 @@ function searchCity() {
         url: queryURL,
         method: 'GET'
         // If the request was a success then this function will run
-    }).then(function(response) {
+    }).then(function (response) {
         // Console log the response
         console.log(response);
 
@@ -281,7 +281,7 @@ function searchCity() {
 
         // Change the card title to name
         $('.cityName').text(name);
-        
+
         //Hide the welcome screen 
         $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').hide();
 
@@ -298,7 +298,7 @@ function searchCity() {
 
         // Set the src of icon to the icon from OpenWeather
         $('.icon').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
-        
+
         // Set the text of each item to data collected from the OpenWeather api
         $('.temp').text(`Temperature: ${Math.round(response.main.temp)} ${unitTemp}`);
         $('.feels').text(`Feels like: ${Math.round(response.main.feels_like)} ${unitTemp}`);
@@ -311,7 +311,7 @@ function searchCity() {
         if (unit == 'metric') {
             // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
             $('.wind').text(`Wind Speed: ${((response.wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
-        } 
+        }
         // If the user prefers the imperial system, then the text will just be set to mph.
         else {
             $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} ${unitSpeed}`);
@@ -322,7 +322,7 @@ function searchCity() {
         addToList();
 
         // If the ajax request fails
-    }).catch(function(error) {
+    }).catch(function (error) {
         // Conosole log the error
         console.log(error)
 
@@ -342,14 +342,14 @@ function fiveDayAjax() {
     $.ajax({
         url: fiveDayURL,
         method: 'GET'
-    }).then(function(fiveReponse) {
+    }).then(function (fiveReponse) {
         // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
         var numberList = [4, 12, 20, 28, 37];
 
         // Set the var of i outside the each function so it can count properly
         var i = -1;
 
-        $(numberList).each(function(e) {
+        $(numberList).each(function (e) {
             i++;
 
             // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
@@ -372,7 +372,7 @@ function fiveDayAjax() {
             if (unit == 'metric') {
                 // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
                 $(`.wind${i}`).text(`Wind: ${((fiveReponse.list[numberList[e]].wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
-            } 
+            }
             // If the user prefers the imperial system, then the text will just be set to mph.
             else {
                 $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} ${unitSpeed}`);
@@ -380,7 +380,7 @@ function fiveDayAjax() {
             $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[numberList[e]].main.humidity}%`);
         })
 
-    }).catch(function(fiveError) {
+    }).catch(function (fiveError) {
         console.log(fiveError)
     })
 }
@@ -398,8 +398,8 @@ function addToList() {
 
         // Then set the item into the user's local storage using JSON's stringify method
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
-    } 
-    
+    }
+
     /* If the user had made previous searches before then this else if statement will check and see if the latest search is already saved in the list. 
     if it is already saved then the bottom else statement will run. This is to prevent the same city from showing up more than once on the previous searches list. */
     else if (prevSearches.indexOf(name) === -1) {
@@ -410,7 +410,7 @@ function addToList() {
 
             // Then set the latest search to the front of the array
             prevSearches.unshift(name);
-        } 
+        }
 
         // If prevSearches is less than 4
         else {
@@ -420,7 +420,7 @@ function addToList() {
 
         // Then after all of that is done, save prevSearches to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
-    } 
+    }
 
     /* If the user has made a previous searches and the user searches for the same city 
     This else statement will run and make sure that the users latest search is always first in the array*/
@@ -458,7 +458,7 @@ function activeBtn() {
                 }
                 break;
         }
-    } 
+    }
 
     // If neither were picked, then it was one of the unit buttons
     else {
@@ -487,8 +487,8 @@ function activeBtn() {
 function save() {
     // If the user chose 12-Hour time
     if ($('.12HourBtn').hasClass('active')) {
-        localStorage.setItem('clock', 12);  
-    } 
+        localStorage.setItem('clock', 12);
+    }
     // If the user chose 24-Hour time
     else {
         localStorage.setItem('clock', 24);
@@ -497,7 +497,7 @@ function save() {
     // If the user chose Imperial
     if ($('.imperialBtn').hasClass('active')) {
         localStorage.setItem('unit', 'imperial');
-    } 
+    }
     // If the user chose Metric
     else {
         localStorage.setItem('unit', 'metric');

@@ -1,260 +1,268 @@
 <!DOCTYPE html>
 
 <html lang="en-us">
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Link to bootstrap -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <!-- Link to Google fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
-        <!-- Link to the style sheet -->
-        <link rel="stylesheet" href="assets/CSS/style.css">
-        <title>LJ's | Weather app</title>
-    </head>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Link to bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- Link to Google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
+  <!-- Link to the style sheet -->
+  <link rel="stylesheet" href="assets/CSS/style.css">
+  <title>LJ's | Weather app</title>
+</head>
 
-    <body>
-        <!-- Navbar/Header -->
-        <nav class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand" href="https://hockeyduck3.github.io/Portfolio">LJ Spencer</a>
-            <!-- Moment.js display -->
-            <p class="dateTime"></p>
-            
-            <!-- Navbar Searchbar -->
-            <div class="input-group navSearch hide">
-                <input type="text" class="form-control form-control2 searchBar2" placeholder="Search another city" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary searchBtn2" type="submit" id="button-addon2">Search</button>
-                </div>
-            </div>
-        </nav>
+<body>
+  <!-- Navbar/Header -->
+  <nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="https://hockeyduck3.github.io/Portfolio">LJ Spencer</a>
+    <!-- Moment.js display -->
+    <p class="dateTime"></p>
 
-        <!-- Error for the navbar search -->
-        <p class="error error2 hide">placeholder</p>
+    <!-- Navbar Searchbar -->
+    <div class="input-group navSearch hide">
+      <input type="text" class="form-control form-control2 searchBar2" placeholder="Search another city"
+        aria-label="Recipient's username" aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary searchBtn2" type="submit" id="button-addon2">Search</button>
+      </div>
+    </div>
+  </nav>
 
-        <!-- Welcome text -->
-        <h2 class="greetingText">Welcome! Let's check the weather.</h2>
+  <!-- Error for the navbar search -->
+  <p class="error error2 hide">placeholder</p>
 
-        <!-- Modal for the settings page -->
-        <div class="modal fade" id="myModal" data-backdrop="static">
-          <div class="modal-dialog">
-            <div class="modal-content">
+  <!-- Welcome text -->
+  <h2 class="greetingText">Welcome! Let's check the weather.</h2>
 
-              <!-- Modal header -->
-              <div class="modal-header">
-                <h4 class="settingsHeader">Settings</h4>
-              </div>
+  <!-- Modal for the settings page -->
+  <div class="modal fade" id="myModal" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
 
-              <!-- Modal body -->
-              <div class="modal-body">
-                <!-- Time format setting -->
-                <div class="btn-group" role="group">
-                  <p class="timeFormText">Time format: </p>
-                  <button type="button" class="btn-secondary timeBtn 12HourBtn active">12-Hour</button>
-                  <button type="button" class="btn-secondary timeBtn 24HourBtn">24-Hour</button>
-                </div>
+        <!-- Modal header -->
+        <div class="modal-header">
+          <h4 class="settingsHeader">Settings</h4>
+        </div>
 
-                <!-- Unit choice: setting -->
-                <div class="btn-group unitRow" role="group">
-                  <p class="unitFormText">Unit choice: </p>
-                  <button type="button" class="btn-secondary unitBtn imperialBtn active">Imperial</button>
-                  <button type="button" class="btn-secondary unitBtn metricBtn">Metric</button>
-                </div>
-              </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <!-- Time format setting -->
+          <div class="btn-group" role="group">
+            <p class="timeFormText">Time format: </p>
+            <button type="button" class="btn-secondary timeBtn 12HourBtn active">12-Hour</button>
+            <button type="button" class="btn-secondary timeBtn 24HourBtn">24-Hour</button>
+          </div>
 
-              <!-- Modal footer -->
-              <div class="modal-footer">
-                <button type="button" class="btn-secondary cancelBtn" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn-primary saveBtn" data-dismiss="modal">Save changes</button>
-              </div>
-            </div>
+          <!-- Unit choice: setting -->
+          <div class="btn-group unitRow" role="group">
+            <p class="unitFormText">Unit choice: </p>
+            <button type="button" class="btn-secondary unitBtn imperialBtn active">Imperial</button>
+            <button type="button" class="btn-secondary unitBtn metricBtn">Metric</button>
           </div>
         </div>
-        
-        <!-- Main body -->
-        <div class="container-fluid">
-          <!-- Forecast -->
-            <main class="card hide">
-                <section class="card-body">
-                  <!-- Name of the city will get added here from the javascript -->
-                    <h2 class="cityName">City Name</h2>
 
-                    <!-- Settings button that shows up on the forecast page -->
-                    <button type="button" class="settingsBtn2" data-toggle="modal" data-target="#myModal">
-                      <i class="fas fa-cog fa-2x"></i>
-                    </button>
-
-                    <hr class="line">
-
-                    <!-- Current forecast text -->
-                    <p class="currentDayText">Current Forecast</p>
-
-                    <!-- Current temp data -->
-                    <div class="row">
-                        <!-- Current temps -->
-                        <div class="card col-md-6">
-                            <div class="card-body">
-                                <div class="iconRow">
-                                  <span class="description"></span><img src="" alt="Weather Icon" class="icon">
-                                </div>
-                                <p class="temp"></p>
-                                <p class="feels"></p>
-                                <p class="low"></p>
-                                <p class="high"></p>
-                            </div>
-                        </div>
-
-                        <!-- Other data -->
-                        <div class="card col-md-3">
-                            <div class="card-body">
-                                <p class="cloud"></p>
-                                <p class="humidity"></p>
-                                <p class="wind"></p>
-                                <p class="pressure"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 5-Day forecast text -->
-                    <p class="fiveDayText">5-Day Forecast</p>
-
-                    <!-- 5 day cards -->
-                    <div class="row fiveDay">
-                        <!-- First day -->
-                        <div class="card box col-md-2">
-                            <!-- Date -->
-                            <div class="card-header">
-                              <!-- Date Text -->
-                              <span class="date0"></span>
-                              <!-- Weather Icon -->
-                              <img src="" alt="Weather Icon" class="icon2 dateImg0">
-                            </div>
-                            <!-- Forecast -->
-                            <div class="card-body">
-                              <blockquote class="blockquote mb-0">
-                                <p class="temp0"></p>
-                                <p class="wind0"></p>
-                                <p class="humidity0"></p>
-                              </blockquote>
-                            </div>
-                        </div>
-
-                        <!-- Second day -->
-                        <div class="card box col-md-2">
-                            <!-- Date -->
-                            <div class="card-header">
-                              <!-- Date text -->
-                              <span class="date1"></span>
-                              <!-- Weather Icon -->
-                              <img src="" alt="Weather Icon" class="icon2 dateImg1">
-                            </div>
-                            <!-- Forecast -->
-                            <div class="card-body">
-                              <blockquote class="blockquote mb-0">
-                                <p class="temp1"></p>
-                                <p class="wind1"></p>
-                                <p class="humidity1"></p>
-                              </blockquote>
-                            </div>
-                        </div>
-
-                        <!-- Third day -->
-                        <div class="card box col-md-2">
-                            <!-- Date -->
-                            <div class="card-header">
-                              <!-- Date text -->
-                              <span class="date2"></span>
-                              <!-- Weather Icon -->
-                              <img src="" alt="Weather Icon" class="icon2 dateImg2">
-                            </div>
-                            <!-- Forecast -->
-                            <div class="card-body">
-                              <blockquote class="blockquote mb-0">
-                                <p class="temp2"></p>
-                                <p class="wind2"></p>
-                                <p class="humidity2"></p>
-                              </blockquote>
-                            </div>
-                        </div>
-
-                        <!-- Forth day -->
-                        <div class="card box col-md-2">
-                            <!-- Date -->
-                            <div class="card-header">
-                              <!-- Date text -->
-                              <span class="date3"></span>
-                              <!-- Weather Icon -->
-                              <img src="" alt="Weather Icon" class="icon2 dateImg3">
-                            </div>
-                            <!-- Forecast -->
-                            <div class="card-body">
-                              <blockquote class="blockquote mb-0">
-                                <p class="temp3"></p>
-                                <p class="wind3"></p>
-                                <p class="humidity3"></p>
-                              </blockquote>
-                            </div>
-                        </div>
-
-                        <!-- Fifth day -->
-                        <div class="card box col-md-2">
-                            <!-- Date -->
-                            <div class="card-header">
-                              <!-- Date text -->
-                              <span class="date4"></span>
-                              <!-- Weather Icon -->
-                              <img src="" alt="Weather Icon" class="icon2 dateImg4">
-                            </div>
-                            <!-- Forecast -->
-                            <div class="card-body">
-                              <blockquote class="blockquote mb-0">
-                                <p class="temp4"></p>
-                                <p class="wind4"></p>
-                                <p class="humidity4"></p>
-                              </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            <!-- Search Bar -->
-            <div class="input-group firstSearch">
-                <input type="text" class="form-control searchBar" placeholder="City Name or Zip Code" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary searchBtn" type="submit" id="button-addon2">Search</button>
-                </div>
-            </div>
-
-            <!-- Error -->
-            <p class="error hide mainError">placeholder</p>
-
-            <!-- Previous choices/Possible choices title -->
-            <p class="previousChoices">Previous searches</p>
-            <!-- Row for the buttons -->
-            <div class="row choiceRow">
-            </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary cancelBtn" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-primary saveBtn" data-dismiss="modal">Save changes</button>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Settings button that shows up on the welcome screen -->
-        <button type="button" class="settingsBtn1" data-toggle="modal" data-target="#myModal">
+  <!-- Main body -->
+  <div class="container-fluid">
+    <!-- Forecast -->
+    <main class="card hide">
+      <section class="card-body">
+        <!-- Name of the city will get added here from the javascript -->
+        <h2 class="cityName">City Name</h2>
+
+        <!-- Settings button that shows up on the forecast page -->
+        <button type="button" class="settingsBtn2" data-toggle="modal" data-target="#myModal">
           <i class="fas fa-cog fa-2x"></i>
         </button>
 
-        <!-- Footer -->
-        <footer>
-            <p>Made with &hearts; in SLC.</p>
-            <p id="copy">&copy; Copyright 2020.</p>
-        </footer>
+        <hr class="line">
 
-        <!-- Font Awesome link -->
-        <script src="https://kit.fontawesome.com/0a5e91de56.js" crossorigin="anonymous"></script>
-        <!-- jQuery link -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <!-- Bootstrap JS links -->
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <!-- Moment.js link -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-        <!-- Link to the Javascript -->
-        <script src="assets/Javascript/script.js"></script>
-    </body>
+        <!-- Current forecast text -->
+        <p class="currentDayText">Current Forecast</p>
+
+        <!-- Current temp data -->
+        <div class="row">
+          <!-- Current temps -->
+          <div class="card col-md-6">
+            <div class="card-body">
+              <div class="iconRow">
+                <span class="description"></span><img src="" alt="Weather Icon" class="icon">
+              </div>
+              <p class="temp"></p>
+              <p class="feels"></p>
+              <p class="low"></p>
+              <p class="high"></p>
+            </div>
+          </div>
+
+          <!-- Other data -->
+          <div class="card col-md-3">
+            <div class="card-body">
+              <p class="cloud"></p>
+              <p class="humidity"></p>
+              <p class="wind"></p>
+              <p class="pressure"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5-Day forecast text -->
+        <p class="fiveDayText">5-Day Forecast</p>
+
+        <!-- 5 day cards -->
+        <div class="row fiveDay">
+          <!-- First day -->
+          <div class="card box col-md-2">
+            <!-- Date -->
+            <div class="card-header">
+              <!-- Date Text -->
+              <span class="date0"></span>
+              <!-- Weather Icon -->
+              <img src="" alt="Weather Icon" class="icon2 dateImg0">
+            </div>
+            <!-- Forecast -->
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p class="temp0"></p>
+                <p class="wind0"></p>
+                <p class="humidity0"></p>
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Second day -->
+          <div class="card box col-md-2">
+            <!-- Date -->
+            <div class="card-header">
+              <!-- Date text -->
+              <span class="date1"></span>
+              <!-- Weather Icon -->
+              <img src="" alt="Weather Icon" class="icon2 dateImg1">
+            </div>
+            <!-- Forecast -->
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p class="temp1"></p>
+                <p class="wind1"></p>
+                <p class="humidity1"></p>
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Third day -->
+          <div class="card box col-md-2">
+            <!-- Date -->
+            <div class="card-header">
+              <!-- Date text -->
+              <span class="date2"></span>
+              <!-- Weather Icon -->
+              <img src="" alt="Weather Icon" class="icon2 dateImg2">
+            </div>
+            <!-- Forecast -->
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p class="temp2"></p>
+                <p class="wind2"></p>
+                <p class="humidity2"></p>
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Forth day -->
+          <div class="card box col-md-2">
+            <!-- Date -->
+            <div class="card-header">
+              <!-- Date text -->
+              <span class="date3"></span>
+              <!-- Weather Icon -->
+              <img src="" alt="Weather Icon" class="icon2 dateImg3">
+            </div>
+            <!-- Forecast -->
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p class="temp3"></p>
+                <p class="wind3"></p>
+                <p class="humidity3"></p>
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Fifth day -->
+          <div class="card box col-md-2">
+            <!-- Date -->
+            <div class="card-header">
+              <!-- Date text -->
+              <span class="date4"></span>
+              <!-- Weather Icon -->
+              <img src="" alt="Weather Icon" class="icon2 dateImg4">
+            </div>
+            <!-- Forecast -->
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p class="temp4"></p>
+                <p class="wind4"></p>
+                <p class="humidity4"></p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Search Bar -->
+    <div class="input-group firstSearch">
+      <input type="text" class="form-control searchBar" placeholder="City Name or Zip Code"
+        aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary searchBtn" type="submit" id="button-addon2">Search</button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <p class="error hide mainError">placeholder</p>
+
+    <!-- Previous choices/Possible choices title -->
+    <p class="previousChoices">Previous searches</p>
+    <!-- Row for the buttons -->
+    <div class="row choiceRow">
+    </div>
+  </div>
+
+  <!-- Settings button that shows up on the welcome screen -->
+  <button type="button" class="settingsBtn1" data-toggle="modal" data-target="#myModal">
+    <i class="fas fa-cog fa-2x"></i>
+  </button>
+
+  <!-- Footer -->
+  <footer>
+    <p>Made with &hearts; in SLC.</p>
+    <p id="copy">&copy; Copyright 2020.</p>
+  </footer>
+
+  <!-- Font Awesome link -->
+  <script src="https://kit.fontawesome.com/0a5e91de56.js" crossorigin="anonymous"></script>
+  <!-- jQuery link -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap JS links -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <!-- Moment.js link -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <!-- Link to the Javascript -->
+  <script src="assets/Javascript/script.js"></script>
+</body>
+</html>
