@@ -302,6 +302,25 @@ blockquote p {
     display: none;
 }
 
+/* Github link/p tag */
+.beforeFooter {
+    font-size: 11px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#githubLink {
+    color: black;
+    font-size: 15px;
+    transition: linear 0.1s;
+}
+
+#githubLink:hover {
+    color: rgb(116, 116, 116);
+    transition: linear 0.1s;
+    text-decoration: none;
+}
+
 /* Footer */
 footer {
     background-color: #444;
