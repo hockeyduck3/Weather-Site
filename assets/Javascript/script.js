@@ -347,38 +347,31 @@ function fiveDayAjax() {
         // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
         var numberList = [4, 12, 20, 28, 37];
 
-        // Set the var of i outside the each function so it can count properly
-        var i = -1;
-
         $(numberList).each(function (e) {
-            i++;
-
             // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
-            $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[numberList[e]].weather[0].icon}@2x.png`);
+            $(`.dateImg${e}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[numberList[e]].weather[0].icon}@2x.png`);
 
             // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
             var unixTime = (fiveReponse.list[numberList[e]].dt_txt).slice(0, 10);
-
-            console.log(numberList[e]);
 
             // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
             var dateText = moment(unixTime).format("ddd, MMM Do");
 
             // Assign the dateText var to date0, 1, 2, 3, 4
-            $(`.date${i}`).text(dateText);
+            $(`.date${e}`).text(dateText);
 
-            $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[numberList[e]].main.temp)} ${unitTemp}`);
+            $(`.temp${e}`).text(`Temp: ${Math.round(fiveReponse.list[numberList[e]].main.temp)} ${unitTemp}`);
 
             // If the user prefers the metric system
             if (unit == 'metric') {
                 // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
-                $(`.wind${i}`).text(`Wind: ${((fiveReponse.list[numberList[e]].wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
+                $(`.wind${e}`).text(`Wind: ${((fiveReponse.list[numberList[e]].wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
             }
             // If the user prefers the imperial system, then the text will just be set to mph.
             else {
-                $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} ${unitSpeed}`);
+                $(`.wind${e}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} ${unitSpeed}`);
             }
-            $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[numberList[e]].main.humidity}%`);
+            $(`.humidity${e}`).text(`Humidity: ${fiveReponse.list[numberList[e]].main.humidity}%`);
         })
 
     }).catch(function (fiveError) {
@@ -450,14 +443,13 @@ function activeBtn() {
                     $('.12HourBtn').addClass('active');
                 }
                 break;
-            case false:
+            default:
                 if ($(this).hasClass('active')) {
                     return;
                 } else {
                     $('.12HourBtn').removeClass('active');
                     $('.24HourBtn').addClass('active');
                 }
-                break;
         }
     }
 
@@ -472,14 +464,13 @@ function activeBtn() {
                     $('.imperialBtn').addClass('active');
                 }
                 break;
-            case false:
+            default:
                 if ($(this).hasClass('active')) {
                     return;
                 } else {
                     $('.imperialBtn').removeClass('active');
                     $('.metricBtn').addClass('active');
                 }
-                break;
         }
     }
 }
