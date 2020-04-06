@@ -263,7 +263,6 @@ function searchBar() {
 function searchCity() {
     // Start the ajax call for the five day forcast
     fiveDayAjax();
-    console.log(queryURL)
 
     // Just in case if the error is still on the screen run the error function
     error();
@@ -298,7 +297,7 @@ function searchCity() {
         $('.description').text(descText);
 
         // Set the src of icon to the icon from OpenWeather
-        $('.icon').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
+        $('.icon').attr('src', `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
 
         // Set the text of each item to data collected from the OpenWeather api
         $('.temp').text(`Temperature: ${Math.round(response.main.temp)} ${unitTemp}`);
@@ -344,12 +343,15 @@ function fiveDayAjax() {
         url: fiveDayURL,
         method: 'GET'
     }).then(function (fiveReponse) {
+        // Console log the fiveResponse
+        console.log(fiveReponse)
+
         // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
         var numberList = [4, 12, 20, 28, 37];
 
         $(numberList).each(function (e) {
             // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
-            $(`.dateImg${e}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[numberList[e]].weather[0].icon}@2x.png`);
+            $(`.dateImg${e}`).attr('src', `https://openweathermap.org/img/wn/${fiveReponse.list[numberList[e]].weather[0].icon}@2x.png`);
 
             // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
             var unixTime = (fiveReponse.list[numberList[e]].dt_txt).slice(0, 10);
