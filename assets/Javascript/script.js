@@ -346,8 +346,8 @@ function fiveDayAjax() {
         // Console log the fiveResponse
         console.log(fiveReponse)
 
-        // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
-        var numberList = [4, 12, 20, 28, 37];
+        // This list will be used to grab list 0, 8, 16, 24, 32, then grab specific info from those lists
+        var numberList = [0, 8, 16, 24, 32];
 
         $(numberList).each(function (e) {
             // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
