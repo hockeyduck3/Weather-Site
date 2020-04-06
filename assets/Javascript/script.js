@@ -65,32 +65,29 @@ $('.cityBtn').click(function() {
     searchCity();
 })
 
-$('.timeBtn').click(activeTimerBtn);
+$('.timeBtn, .unitBtn').click(activeBtn);
 
 $('.saveBtn').click(save);
 
 // Load function
 function load() {
-
-
-    if (localStorage.getItem('clock') === null) {
-        localStorage.setItem('clock', 12);
-        timeForm == 12;
-    } else {
-        timeForm = localStorage.getItem('clock');
-
-        if (timeForm == 24) {
-            $('.12HourBtn').removeClass('active');
-            $('.24HourBtn').addClass('active');
-        }
-    }
-
-    switch(timeForm) {
-        case '24':
-            var momentFormat = moment().format("ddd, ll HH:mm");
+    switch (localStorage.getItem('clock') === null) {
+        case true:
+            localStorage.setItem('clock', 12);
+            timeForm == 12;
             break;
         default:
-            var momentFormat = moment().format('llll');
+            timeForm = localStorage.getItem('clock');
+
+            switch (timeForm) {
+                case '24':
+                    $('.12HourBtn').removeClass('active');
+                    $('.24HourBtn').addClass('active');
+                    var momentFormat = moment().format("ddd, ll HH:mm");
+                    break;
+                default:
+                    var momentFormat = moment().format('llll');
+            }
     }
 
     // Set the date and time text to the current date and time via moment.js
@@ -101,38 +98,35 @@ function load() {
         $('.dateTime').text(momentFormat);
     }, 1000);
 
+    switch(JSON.parse(localStorage.getItem('prevSearches')) === null) {
+        case true:
+            // If the above if statement is true then the prevSearches array will be set to this default list
+            prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
 
-    // This if statement will check and see if the user has not done any previous searches
-    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
-        // If the above if statement is true then the prevSearches array will be set to this default list
-        prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
+            // The text of previous searches will be set to 'Possible choices' 
+            $('.previousChoices').text('Possible choices');
 
-        // The text of previous searches will be set to 'Possible choices' 
-        $('.previousChoices').text('Possible choices');
+            // Then this function will go in and create buttons based on the prevSearches array
+            $(prevSearches).each(function(e) {
+                // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
+                var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
 
-        // Then this function will go in and create buttons based on the prevSearches array
-        $(prevSearches).each(function(e) {
-            // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
-            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+                // Append the newly made buttons to .choiceRow
+                $('.choiceRow').append(button);
+            })
+            break;
+        default:
+            // The prevSearchs array will be set to the saved array in the user's local storage
+            prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
 
-            // Append the newly made buttons to .choiceRow
-            $('.choiceRow').append(button);
-        })
-    } 
-
-    //If the user has made previous searches 
-    else {
-        // The prevSearchs array will be set to the saved array in the user's local storage
-        prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
-
-        // Then this function will make buttons based off of the users
-        $(prevSearches).each(function(e) {
-            // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
-            var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
-            
-            // Then appened the newly made button to .choiceRow
-            $('.choiceRow').append(button);
-        })
+            // Then this function will make buttons based off of the users
+            $(prevSearches).each(function(e) {
+                // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
+                var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+                
+                // Then appened the newly made button to .choiceRow
+                $('.choiceRow').append(button);
+            })
     }
 }
 
@@ -144,7 +138,6 @@ function grabCityVal() {
     if (which === 'firstSearch') {
         // Grab the value from the search bar and trim the whitespaces off of it
         cityVal = $('.searchBar').val().trim();
-
     } 
 
     // Otherwise
@@ -294,28 +287,31 @@ function fiveDayAjax() {
         // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
         var numberList = [4, 12, 20, 28, 37];
 
-        // Loop through the five day forecast 
-        for (var i = 0; i < numberList.length; i++) {
-            // Index is set to the index of numberList[i]
-            var index = numberList[i];
+        // Set the var of i outside the each function so it can count properly
+        var i = -1;
+
+        $(numberList).each(function(e) {
+            i++;
 
             // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
-            $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[index].weather[0].icon}@2x.png`);
+            $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[numberList[e]].weather[0].icon}@2x.png`);
 
             // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
-            var unixTime = (fiveReponse.list[index].dt_txt).slice(0, 10);
+            var unixTime = (fiveReponse.list[numberList[e]].dt_txt).slice(0, 10);
+
+            console.log(numberList[e]);
 
             // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
             var dateText = moment(unixTime).format("ddd, MMM Do");
-            
+
             // Assign the dateText var to date0, 1, 2, 3, 4
             $(`.date${i}`).text(dateText);
 
+            $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[numberList[e]].main.temp)} °F`);
+            $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} m/h`);
+            $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[numberList[e]].main.humidity}%`);
+        })
 
-            $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[index].main.temp)} °F`);
-            $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[index].wind.speed).toFixed(1)} m/h`);
-            $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[index].main.humidity}%`);
-        }
     }).catch(function(fiveError) {
         console.log(fiveError)
     })
@@ -373,20 +369,44 @@ function addToList() {
 }
 
 // Setting button functions
-function activeTimerBtn() {
-    if ($(this).hasClass('12HourBtn')) {
-        if ($(this).hasClass('active')) {
-            return;
-        } else {
-            $('.24HourBtn').removeClass('active');
-            $('.12HourBtn').addClass('active');
+function activeBtn() {
+    if ($(this).hasClass('12HourBtn') || $(this).hasClass('24HourBtn')) {
+        switch ($(this).hasClass('12HourBtn')) {
+            case true:
+                if ($(this).hasClass('active')) {
+                    return;
+                } else {
+                    $('.24HourBtn').removeClass('active');
+                    $('.12HourBtn').addClass('active');
+                }
+                break;
+            case false:
+                if ($(this).hasClass('active')) {
+                    return;
+                } else {
+                    $('.12HourBtn').removeClass('active');
+                    $('.24HourBtn').addClass('active');
+                }
+                break;
         }
     } else {
-        if ($(this).hasClass('active')) {
-            return;
-        } else {
-            $('.12HourBtn').removeClass('active');
-            $('.24HourBtn').addClass('active');
+        switch ($(this).hasClass('imperialBtn')) {
+            case true:
+                if ($(this).hasClass('active')) {
+                    return;
+                } else {
+                    $('.metricBtn').removeClass('active');
+                    $('.imperialBtn').addClass('active');
+                }
+                break;
+            case false:
+                if ($(this).hasClass('active')) {
+                    return;
+                } else {
+                    $('.imperialBtn').removeClass('active');
+                    $('.metricBtn').addClass('active');
+                }
+                break;
         }
     }
 }
