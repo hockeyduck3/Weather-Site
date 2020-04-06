@@ -6,6 +6,7 @@ var prevSearches = [];
 var errorMes = $('.error');
 var name;
 var which = 'firstSearch';
+var timeForm;
 
 // Trigger the load function
 load();
@@ -64,17 +65,42 @@ $('.cityBtn').click(function() {
     searchCity();
 })
 
-$('.timeBtn').click(activeBtn)
+$('.timeBtn').click(activeTimerBtn);
+
+$('.saveBtn').click(save);
 
 // Load function
 function load() {
+
+
+    if (localStorage.getItem('clock') === null) {
+        localStorage.setItem('clock', 12);
+        timeForm == 12;
+    } else {
+        timeForm = localStorage.getItem('clock');
+
+        if (timeForm == 24) {
+            $('.12HourBtn').removeClass('active');
+            $('.24HourBtn').addClass('active');
+        }
+    }
+
+    switch(timeForm) {
+        case '24':
+            var momentFormat = moment().format("ddd, ll HH:mm");
+            break;
+        default:
+            var momentFormat = moment().format('llll');
+    }
+
     // Set the date and time text to the current date and time via moment.js
-    $('.dateTime').text(moment().format('llll'))
+    $('.dateTime').text(momentFormat);
 
     // This interval will make sure that the date and time is always up to date
     setInterval(function() {
-        $('.dateTime').text(moment().format('llll'))
-    }, 1000)
+        $('.dateTime').text(momentFormat);
+    }, 1000);
+
 
     // This if statement will check and see if the user has not done any previous searches
     if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
@@ -192,6 +218,9 @@ function searchBar() {
 
 // Search city function
 function searchCity() {
+    // Start the ajax call for the five day forcast
+    fiveDayAjax();
+    
     // Just in case if the error is still on the screen run the error function
     error();
 
@@ -240,37 +269,6 @@ function searchCity() {
         // Trigger addToList function
         addToList();
 
-        // Ajax request for the 5 day forecast
-        $.ajax({
-            url: fiveDayURL,
-            method: 'GET'
-        }).then(function(fiveReponse) {
-            // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
-            var numberList = [4, 12, 20, 28, 37];
-
-            // Loop through the five day forecast 
-            for (var i = 0; i < numberList.length; i++) {
-                // Index is set to the index of numberList[i]
-                var index = numberList[i];
-
-                // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
-                var unixTime = (fiveReponse.list[index].dt_txt).slice(0, 10);
-
-                // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
-                var dateText = moment(unixTime).format("ddd, MMM Do");
-                
-                // Assign the dateText var to date0, 1, 2, 3, 4
-                $(`.date${i}`).text(dateText);
-
-                // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
-                $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[index].weather[0].icon}@2x.png`);
-
-                $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[index].main.temp)} °F`);
-                $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[index].wind.speed).toFixed(1)} m/h`);
-                $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[index].main.humidity}%`);
-            }
-        })
-
         // If the ajax request fails
     }).catch(function(error) {
         // Conosole log the error
@@ -284,6 +282,42 @@ function searchCity() {
         } else {
             $('.error2').slideDown('600');
         }
+    })
+}
+
+function fiveDayAjax() {
+    // Ajax request for the 5 day forecast
+    $.ajax({
+        url: fiveDayURL,
+        method: 'GET'
+    }).then(function(fiveReponse) {
+        // This list will be used to grab list 4, 12, 20, 28, 37, then grab specific info from those lists
+        var numberList = [4, 12, 20, 28, 37];
+
+        // Loop through the five day forecast 
+        for (var i = 0; i < numberList.length; i++) {
+            // Index is set to the index of numberList[i]
+            var index = numberList[i];
+
+            // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
+            $(`.dateImg${i}`).attr('src', `http://openweathermap.org/img/wn/${fiveReponse.list[index].weather[0].icon}@2x.png`);
+
+            // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
+            var unixTime = (fiveReponse.list[index].dt_txt).slice(0, 10);
+
+            // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
+            var dateText = moment(unixTime).format("ddd, MMM Do");
+            
+            // Assign the dateText var to date0, 1, 2, 3, 4
+            $(`.date${i}`).text(dateText);
+
+
+            $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[index].main.temp)} °F`);
+            $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[index].wind.speed).toFixed(1)} m/h`);
+            $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[index].main.humidity}%`);
+        }
+    }).catch(function(fiveError) {
+        console.log(fiveError)
     })
 }
 
@@ -339,7 +373,7 @@ function addToList() {
 }
 
 // Setting button functions
-function activeBtn() {
+function activeTimerBtn() {
     if ($(this).hasClass('12HourBtn')) {
         if ($(this).hasClass('active')) {
             return;
@@ -355,6 +389,19 @@ function activeBtn() {
             $('.24HourBtn').addClass('active');
         }
     }
+}
+
+function save() {
+    // This if statement will check and see which setting the user chose and save their preference to the local storage
+    if ($('.12HourBtn').hasClass('active')) {
+        localStorage.setItem('clock', 12);
+        
+    } else {
+        localStorage.setItem('clock', 24);
+    }
+
+    // Refresh the page so that the changes can take place
+    location.reload();
 }
 
 function error() {
