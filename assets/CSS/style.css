@@ -261,12 +261,18 @@ blockquote p {
 }
 
 .closeBtn {
+    background-color: #444;
     padding: 6px 15px;
+}
+
+/* This styling is for the active button state */
+.btn-secondary:not(:disabled):not(.disabled).active {
+    background-color: #444;
 }
 
 
 /* Settings for the time settings */
-.timeBtn {
+.timeBtn, .unitBtn {
     background-color: #8c9094;
     border: none;
     border-radius: 5px;
@@ -274,10 +280,14 @@ blockquote p {
     font-size: 20px;
 }
 
-.timeFormText {
+.timeFormText, .unitFormText {
     margin-top: 5px;
     margin-right: 5px;
     font-size: 25px;
+}
+
+.unitRow {
+    margin-top: 10px;
 }
 
 /* Using this to hide things initially, then using jQuery to hide the rest */
