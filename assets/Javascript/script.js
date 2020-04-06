@@ -7,6 +7,9 @@ var errorMes = $('.error');
 var name;
 var which = 'firstSearch';
 var timeForm;
+var unit;
+var unitTemp;
+var unitSpeed;
 
 // Trigger the load function
 load();
@@ -60,31 +63,43 @@ $('.cityBtn').click(function() {
 
     // Set the cityVal to the text of which ever button clicked it, set the queryURL and fiveDayURL, then trigger the searchCity function.
     cityVal = $(this).text();
-    queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-    fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+    queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+    fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
     searchCity();
 })
 
 $('.timeBtn, .unitBtn').click(activeBtn);
 
 $('.saveBtn').click(save);
+$('.cancelBtn').click(cancel);
 
 // Load function
 function load() {
+    // Check and see if 'clock' is not in the local storage
     switch (localStorage.getItem('clock') === null) {
+        // If true then set 'clock' to 12 in the user's local storage, and set the timeForm variable to 12.
         case true:
             localStorage.setItem('clock', 12);
             timeForm == 12;
             break;
+        
+        // If 'clock' is set in the user's local storage
         default:
+            // Set the timeForm variable to what it is in the local storage
             timeForm = localStorage.getItem('clock');
 
+            // Then check and see what timeForm is set to
             switch (timeForm) {
+                // If it's set to 24 then make the 24-Hour button active in the settings modal
                 case '24':
                     $('.12HourBtn').removeClass('active');
                     $('.24HourBtn').addClass('active');
+
+                    // And format the dateTime text to 24-Hour format
                     var momentFormat = moment().format("ddd, ll HH:mm");
                     break;
+                
+                // If it's set to 12 then format the dateTime text to 12-Hour format
                 default:
                     var momentFormat = moment().format('llll');
             }
@@ -98,9 +113,10 @@ function load() {
         $('.dateTime').text(momentFormat);
     }, 1000);
 
+    // Check and see if the user has not made any previous searches
     switch(JSON.parse(localStorage.getItem('prevSearches')) === null) {
         case true:
-            // If the above if statement is true then the prevSearches array will be set to this default list
+            // If the above switch statement is true then the prevSearches array will be set to this default list
             prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
 
             // The text of previous searches will be set to 'Possible choices' 
@@ -115,6 +131,8 @@ function load() {
                 $('.choiceRow').append(button);
             })
             break;
+
+        // If the user has made previous searches 
         default:
             // The prevSearchs array will be set to the saved array in the user's local storage
             prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
@@ -127,6 +145,37 @@ function load() {
                 // Then appened the newly made button to .choiceRow
                 $('.choiceRow').append(button);
             })
+    }
+
+    // Check and see if the user does not have 'unit' set in their localStorage
+    switch (localStorage.getItem('unit') === null) {
+        case true:
+            // Set unit to the local storage and set the unit variables to imperial units
+            localStorage.setItem('unit', 'imperial');
+            unit = 'imperial';
+            unitTemp = '°F';
+            unitSpeed = 'm/h';
+            break;
+        
+        // If the user does have 'unit' saved to their local storage
+        default:
+            // Check and see if the user prefers metric
+            switch (localStorage.getItem('unit') == 'metric'){
+                // If true then change the unit variables to metric and makes the metric button active in the settings modal
+                case true:
+                    unit = localStorage.getItem('unit');
+                    unitTemp = '°C';
+                    unitSpeed = 'km/h';
+                    $('.imperialBtn').removeClass('active');
+                    $('.metricBtn').addClass('active');
+                    break;
+                // If false then change the unit variables to imperial units
+                default:
+                    unit = localStorage.getItem('unit');
+                    unitTemp = '°F';
+                    unitSpeed = 'm/h';
+            }
+
     }
 }
 
@@ -179,8 +228,8 @@ function searchBar() {
     // If neither error messages are displayed, then this will check and see if cityVal is a city. 
     else if (cityVal.match(/[a-z]/)) {
         // If it is, then the queryURL and fiveDayURL will search by city name
-        queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
         // Then trigger the searchCity function
         searchCity();
@@ -189,8 +238,8 @@ function searchBar() {
     // This will check and see if cityVal is a zip code 
     else if (cityVal.match(/[0-9]/)) {
         // If it is, then the queryURL and fiveDayURL will search by zip code instead
-        queryURL = `https://api.openweathermap.org/data/2.5/weather?zip=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?zip=${cityVal}&units=imperial&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        queryURL = `https://api.openweathermap.org/data/2.5/weather?zip=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?zip=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
         // Then trigger the searchCity function
         searchCity();
@@ -213,6 +262,7 @@ function searchBar() {
 function searchCity() {
     // Start the ajax call for the five day forcast
     fiveDayAjax();
+    console.log(queryURL)
     
     // Just in case if the error is still on the screen run the error function
     error();
@@ -250,13 +300,22 @@ function searchCity() {
         $('.icon').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
         
         // Set the text of each item to data collected from the OpenWeather api
-        $('.temp').text(`Temperature: ${Math.round(response.main.temp)} °F`);
-        $('.feels').text(`Feels like: ${Math.round(response.main.feels_like)} °F`);
-        $('.low').text(`Low of: ${Math.round(response.main.temp_min)} °F`);
-        $('.high').text(`High of: ${Math.round(response.main.temp_max)} °F`);
+        $('.temp').text(`Temperature: ${Math.round(response.main.temp)} ${unitTemp}`);
+        $('.feels').text(`Feels like: ${Math.round(response.main.feels_like)} ${unitTemp}`);
+        $('.low').text(`Low of: ${Math.round(response.main.temp_min)} ${unitTemp}`);
+        $('.high').text(`High of: ${Math.round(response.main.temp_max)} ${unitTemp}`);
         $('.cloud').text(`Cloud percentage: ${response.clouds.all}%`);
         $('.humidity').text(`Humidity: ${response.main.humidity}%`);
-        $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} m/h`);
+
+        // If the user prefers the metric system
+        if (unit == 'metric') {
+            // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
+            $('.wind').text(`Wind Speed: ${((response.wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
+        } 
+        // If the user prefers the imperial system, then the text will just be set to mph.
+        else {
+            $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} ${unitSpeed}`);
+        }
         $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
 
         // Trigger addToList function
@@ -307,8 +366,17 @@ function fiveDayAjax() {
             // Assign the dateText var to date0, 1, 2, 3, 4
             $(`.date${i}`).text(dateText);
 
-            $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[numberList[e]].main.temp)} °F`);
-            $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} m/h`);
+            $(`.temp${i}`).text(`Temp: ${Math.round(fiveReponse.list[numberList[e]].main.temp)} ${unitTemp}`);
+
+            // If the user prefers the metric system
+            if (unit == 'metric') {
+                // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
+                $(`.wind${i}`).text(`Wind: ${((fiveReponse.list[numberList[e]].wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
+            } 
+            // If the user prefers the imperial system, then the text will just be set to mph.
+            else {
+                $(`.wind${i}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} ${unitSpeed}`);
+            }
             $(`.humidity${i}`).text(`Humidity: ${fiveReponse.list[numberList[e]].main.humidity}%`);
         })
 
@@ -370,6 +438,7 @@ function addToList() {
 
 // Setting button functions
 function activeBtn() {
+    // Check and see if the user clicked on either the 12-Hour button or the 24-Hour button
     if ($(this).hasClass('12HourBtn') || $(this).hasClass('24HourBtn')) {
         switch ($(this).hasClass('12HourBtn')) {
             case true:
@@ -389,7 +458,10 @@ function activeBtn() {
                 }
                 break;
         }
-    } else {
+    } 
+
+    // If neither were picked, then it was one of the unit buttons
+    else {
         switch ($(this).hasClass('imperialBtn')) {
             case true:
                 if ($(this).hasClass('active')) {
@@ -411,19 +483,62 @@ function activeBtn() {
     }
 }
 
+// This function will save the user's setting preferences to their localStorage
 function save() {
-    // This if statement will check and see which setting the user chose and save their preference to the local storage
+    // If the user chose 12-Hour time
     if ($('.12HourBtn').hasClass('active')) {
-        localStorage.setItem('clock', 12);
-        
-    } else {
+        localStorage.setItem('clock', 12);  
+    } 
+    // If the user chose 24-Hour time
+    else {
         localStorage.setItem('clock', 24);
+    }
+
+    // If the user chose Imperial
+    if ($('.imperialBtn').hasClass('active')) {
+        localStorage.setItem('unit', 'imperial');
+    } 
+    // If the user chose Metric
+    else {
+        localStorage.setItem('unit', 'metric');
     }
 
     // Refresh the page so that the changes can take place
     location.reload();
 }
 
+// This function will add the class of 'active' back to the button it was on before the user hit cancel
+function cancel() {
+    // Check and see if the clock in localStorage is 24
+    switch (localStorage.getItem('clock') == '24') {
+        // If it is then switch the 24-Hour button to active
+        case true:
+            $('.12HourBtn').removeClass('active');
+            $('.24HourBtn').addClass('active');
+            break;
+
+        // It it's not then switch the 12-Hour button to active
+        default:
+            $('.24HourBtn').removeClass('active');
+            $('.12HourBtn').addClass('active');
+    }
+
+    // Check and see if unit in localStorage is set to metric
+    switch (unit == 'metric') {
+        // If it is then switch the Metric button to active
+        case true:
+            $('.imperialBtn').removeClass('active');
+            $('.metricBtn').addClass('active');
+            break;
+
+        // If it's not then set the Imperial button to active
+        default:
+            $('.metricBtn').removeClass('active');
+            $('.imperialBtn').addClass('active');
+    }
+}
+
+// This function will simply make the error message go away
 function error() {
     errorMes.slideUp('600');
 }
