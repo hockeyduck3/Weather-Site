@@ -178,6 +178,18 @@ function load() {
             }
 
     }
+
+    switch (localStorage.getItem('lastSearch') !== null) {
+        case true:
+            cityVal = localStorage.getItem('lastSearch');
+            queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+            searchCity();
+            break;
+        default:
+            $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').removeClass('hide');
+    }
+
+    $('.beforeFooter').fadeIn('slow');
 }
 
 // This function will grab either the value from the first searchBar or the second one
@@ -228,9 +240,8 @@ function searchBar() {
 
     // If neither error messages are displayed, then this will check and see if cityVal is a city. 
     else if (cityVal.match(/[a-z]/)) {
-        // If it is, then the queryURL and fiveDayURL will search by city name
+        // If it is, then the queryURL will search by city name
         queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
         // Then trigger the searchCity function
         searchCity();
@@ -238,9 +249,8 @@ function searchBar() {
 
     // This will check and see if cityVal is a zip code 
     else if (cityVal.match(/[0-9]/)) {
-        // If it is, then the queryURL and fiveDayURL will search by zip code instead
+        // If it is, then the queryURL will search by zip code instead
         queryURL = `https://api.openweathermap.org/data/2.5/weather?zip=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-        fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?zip=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
         // Then trigger the searchCity function
         searchCity();
@@ -326,8 +336,11 @@ function searchCity() {
             })
         })
         
+        // Set the variable name to the city name given by OpenWeather
+        name = response.name;
+
         // Change the card title the name of the city from the response
-        $('.cityName').text(response.name);
+        $('.cityName').text(name);
 
         //Hide the welcome screen 
         $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').hide();
@@ -433,6 +446,8 @@ function addToList() {
         // Then save to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
     }
+
+    localStorage.setItem('lastSearch', name)
 }
 
 // Setting button functions
