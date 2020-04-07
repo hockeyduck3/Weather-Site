@@ -318,6 +318,29 @@ function searchCity() {
         }
         $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
 
+        var uviUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+
+        $.ajax({
+            url: uviUrl,
+            method: 'GET'
+        }).then(function(uviResponse) {
+            console.log(uviResponse)
+            $('.uviInfo').text(uviResponse.current.uvi);
+
+            if (uviResponse.current.uvi >= 11) {
+                $('.uviInfo').css('background-color', 'purple');
+            } else if (uviResponse.current.uvi >= 8) {
+                $('.uviInfo').css('background-color', 'red');
+            } else if (uviResponse.current.uvi >= 6) {
+                $('.uviInfo').css('background-color', 'orange');
+            } else if (uviResponse.current.uvi >= 3) {
+                $('.uviInfo').css('background-color', 'yellow');
+            } else {
+                $('.uviInfo').css('background-color', 'green');
+
+            }
+        })
+
         // Trigger addToList function
         addToList();
 
