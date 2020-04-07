@@ -261,9 +261,6 @@ function searchBar() {
 
 // Search city function
 function searchCity() {
-    // Start the ajax call for the five day forcast
-    fiveDayAjax();
-
     // Just in case if the error is still on the screen run the error function
     error();
 
@@ -275,12 +272,62 @@ function searchCity() {
     }).then(function (response) {
         // Console log the response
         console.log(response);
+        
+        var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        
+        $.ajax({
+            url: oneCallUrl,
+            method: 'GET'
+        }).then(function(oneCallRepsponse) {
+            console.log(oneCallRepsponse);
 
-        // Set the var 'name' to the openweather api name
-        name = response.name;
+            $('.uviInfo').text(oneCallRepsponse.current.uvi);
 
-        // Change the card title to name
-        $('.cityName').text(name);
+            if (oneCallRepsponse.current.uvi >= 11) {
+                $('.uviInfo').css({'background-color': 'purple', 'color': 'white'});
+            } else if (oneCallRepsponse.current.uvi >= 8) {
+                $('.uviInfo').css({'background-color': 'red', 'color': 'white'});
+            } else if (oneCallRepsponse.current.uvi >= 6) {
+                $('.uviInfo').css({'background-color': 'orange', 'color': 'white'});
+            } else if (oneCallRepsponse.current.uvi >= 3) {
+                $('.uviInfo').css({'background-color': 'yellow', 'color': 'black'});
+            } else {
+                $('.uviInfo').css({'background-color': 'green', 'color': 'white'});
+            }
+
+            // This list will be used to grab list 0, 8, 16, 24, 32, then grab specific info from those lists
+            var numberList = [1, 2, 3, 4, 5];
+
+            $(numberList).each(function (e) {
+                // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
+                $(`.dateImg${e}`).attr('src', `https://openweathermap.org/img/wn/${oneCallRepsponse.daily[numberList[e]].weather[0].icon}@2x.png`);
+
+                // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
+                var unixTime = moment.unix(oneCallRepsponse.daily[numberList[e]].dt);
+
+                // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
+                var dateText = moment(unixTime).format("ddd, MMM Do");
+
+                // Assign the dateText var to date0, 1, 2, 3, 4
+                $(`.date${e}`).text(dateText);
+
+                $(`.temp${e}`).text(`Temp: ${(oneCallRepsponse.daily[numberList[e]].temp.day).toFixed(1)} ${unitTemp}`);
+
+                // // If the user prefers the metric system
+                if (unit == 'metric') {
+                    // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
+                    $(`.wind${e}`).text(`Wind: ${((oneCallRepsponse.daily[numberList[e]].wind_speed) * 3.6).toFixed(1)} ${unitSpeed}`);
+                }
+                // If the user prefers the imperial system, then the text will just be set to mph.
+                else {
+                    $(`.wind${e}`).text(`Wind: ${(oneCallRepsponse.daily[numberList[e]].wind_speed).toFixed(1)} ${unitSpeed}`);
+                }
+                $(`.humidity${e}`).text(`Humidity: ${oneCallRepsponse.daily[numberList[e]].humidity}%`);
+            })
+        })
+        
+        // Change the card title the name of the city from the response
+        $('.cityName').text(response.name);
 
         //Hide the welcome screen 
         $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').hide();
@@ -300,9 +347,9 @@ function searchCity() {
         $('.icon').attr('src', `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
 
         // Set the text of each item to data collected from the OpenWeather api
-        $('.temp').text(`Temperature: ${Math.round(response.main.temp)} ${unitTemp}`);
-        $('.low').text(`Low of: ${Math.round(response.main.temp_min)} ${unitTemp}`);
-        $('.high').text(`High of: ${Math.round(response.main.temp_max)} ${unitTemp}`);
+        $('.temp').text(`Temperature: ${(response.main.temp).toFixed(1)} ${unitTemp}`);
+        $('.low').text(`Low of: ${(response.main.temp_min).toFixed(1)} ${unitTemp}`);
+        $('.high').text(`High of: ${(response.main.temp_max).toFixed(1)} ${unitTemp}`);
         $('.cloud').text(`Cloud percentage: ${response.clouds.all}%`);
         $('.humidity').text(`Humidity: ${response.main.humidity}%`);
 
@@ -317,27 +364,6 @@ function searchCity() {
         }
         $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
 
-        var uviUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-
-        $.ajax({
-            url: uviUrl,
-            method: 'GET'
-        }).then(function(uviResponse) {
-            console.log(uviResponse)
-            $('.uviInfo').text(uviResponse.current.uvi);
-
-            if (uviResponse.current.uvi >= 11) {
-                $('.uviInfo').css({'background-color': 'purple', 'color': 'white'});
-            } else if (uviResponse.current.uvi >= 8) {
-                $('.uviInfo').css({'background-color': 'red', 'color': 'white'});
-            } else if (uviResponse.current.uvi >= 6) {
-                $('.uviInfo').css({'background-color': 'orange', 'color': 'white'});
-            } else if (uviResponse.current.uvi >= 3) {
-                $('.uviInfo').css({'background-color': 'yellow', 'color': 'black'});
-            } else {
-                $('.uviInfo').css({'background-color': 'green', 'color': 'white'});
-            }
-        })
 
         // Trigger addToList function
         addToList();
@@ -355,50 +381,6 @@ function searchCity() {
         } else {
             $('.error2').slideDown('600');
         }
-    })
-}
-
-function fiveDayAjax() {
-    // Ajax request for the 5 day forecast
-    $.ajax({
-        url: fiveDayURL,
-        method: 'GET'
-    }).then(function (fiveReponse) {
-        // Console log the fiveResponse
-        console.log(fiveReponse)
-
-        // This list will be used to grab list 0, 8, 16, 24, 32, then grab specific info from those lists
-        var numberList = [0, 8, 16, 24, 32];
-
-        $(numberList).each(function (e) {
-            // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
-            $(`.dateImg${e}`).attr('src', `https://openweathermap.org/img/wn/${fiveReponse.list[numberList[e]].weather[0].icon}@2x.png`);
-
-            // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
-            var unixTime = (fiveReponse.list[numberList[e]].dt_txt).slice(0, 10);
-
-            // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
-            var dateText = moment(unixTime).format("ddd, MMM Do");
-
-            // Assign the dateText var to date0, 1, 2, 3, 4
-            $(`.date${e}`).text(dateText);
-
-            $(`.temp${e}`).text(`Temp: ${Math.round(fiveReponse.list[numberList[e]].main.temp)} ${unitTemp}`);
-
-            // If the user prefers the metric system
-            if (unit == 'metric') {
-                // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
-                $(`.wind${e}`).text(`Wind: ${((fiveReponse.list[numberList[e]].wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
-            }
-            // If the user prefers the imperial system, then the text will just be set to mph.
-            else {
-                $(`.wind${e}`).text(`Wind: ${(fiveReponse.list[numberList[e]].wind.speed).toFixed(1)} ${unitSpeed}`);
-            }
-            $(`.humidity${e}`).text(`Humidity: ${fiveReponse.list[numberList[e]].main.humidity}%`);
-        })
-
-    }).catch(function (fiveError) {
-        console.log(fiveError)
     })
 }
 
