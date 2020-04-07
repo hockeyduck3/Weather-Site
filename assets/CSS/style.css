@@ -125,6 +125,24 @@ blockquote p {
     width: 35px;
 }
 
+.uvRow {
+    margin-top: 15px;
+    margin-right: 4px;
+    position: absolute;
+    right: 0;
+}
+
+.uviInfo {
+    margin-left: 5px;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.uviText, .uviInfo {
+    font-size: 20px;
+}
+
 /* Styling for the 5-Day forecast */
 .box {
     box-shadow: 6px 5px 1px -3px #444;
@@ -424,6 +442,15 @@ footer p{
        margin-left: 0;
     }
 
+    .uvRow {
+        width: 119px;
+        margin-right: 0;
+    }
+
+    .uviText, .uviInfo {
+        font-size: 16px;
+    }
+
     .description {
         display: none;
     }
@@ -459,6 +486,14 @@ footer p{
 
     .timeBtn, .unitBtn, .timeFormText, .unitFormText {
         font-size: 15px;
+    }
+
+    .uvRow {
+        width: 95px;
+    }
+
+    .uviText, .uviInfo {
+        font-size: 12px;
     }
 
     /* Changing the width to be 10px smaller */
