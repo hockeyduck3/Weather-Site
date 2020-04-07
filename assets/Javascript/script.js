@@ -301,7 +301,6 @@ function searchCity() {
 
         // Set the text of each item to data collected from the OpenWeather api
         $('.temp').text(`Temperature: ${Math.round(response.main.temp)} ${unitTemp}`);
-        $('.feels').text(`Feels like: ${Math.round(response.main.feels_like)} ${unitTemp}`);
         $('.low').text(`Low of: ${Math.round(response.main.temp_min)} ${unitTemp}`);
         $('.high').text(`High of: ${Math.round(response.main.temp_max)} ${unitTemp}`);
         $('.cloud').text(`Cloud percentage: ${response.clouds.all}%`);
@@ -328,16 +327,15 @@ function searchCity() {
             $('.uviInfo').text(uviResponse.current.uvi);
 
             if (uviResponse.current.uvi >= 11) {
-                $('.uviInfo').css('background-color', 'purple');
+                $('.uviInfo').css({'background-color': 'purple', 'color': 'white'});
             } else if (uviResponse.current.uvi >= 8) {
-                $('.uviInfo').css('background-color', 'red');
+                $('.uviInfo').css({'background-color': 'red', 'color': 'white'});
             } else if (uviResponse.current.uvi >= 6) {
-                $('.uviInfo').css('background-color', 'orange');
+                $('.uviInfo').css({'background-color': 'orange', 'color': 'white'});
             } else if (uviResponse.current.uvi >= 3) {
-                $('.uviInfo').css('background-color', 'yellow');
+                $('.uviInfo').css({'background-color': 'yellow', 'color': 'black'});
             } else {
-                $('.uviInfo').css('background-color', 'green');
-
+                $('.uviInfo').css({'background-color': 'green', 'color': 'white'});
             }
         })
 
