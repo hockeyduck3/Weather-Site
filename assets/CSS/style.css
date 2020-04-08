@@ -16,7 +16,7 @@ body {
 }
 
 /* Navbar */
-h2, .navbar-brand, .input-group, .possibleChoices, .fiveDayText, .currentDayText, .dateTime, .cancelBtn, .saveBtn {
+h2, .navbar-brand, .input-group, .possibleChoices, .fiveDayText, .currentDayText, .dateTime, .cancelBtn, .saveBtn, .previousText {
     font-family: 'Yellowtail', cursive;
 }
 
@@ -193,7 +193,7 @@ blockquote p {
 }
 
 /* Styling for the possible choices text*/
-.possibleChoices {
+.possibleChoices, .previousText {
     font-size: 35px;
     text-align: center;
 }
@@ -206,10 +206,7 @@ blockquote p {
 }
 
 .choiceRow {
-    align-self: flex-end;
-    flex-direction: column;
     margin: 10px 5px 0 0;
-    width: 400px;
 }
 
 /* This is so the 5-day forecast row doesn't have 35px of whitespace underneath the cards */
@@ -375,11 +372,15 @@ footer p{
         width: 95%;
     }
 
-    .error2, .choiceRow {
+    .error2 {
         align-self: center;
         font-size: 20px;
         margin: 15px;
         width: 96%;
+    }
+
+    .prevDiv {
+        margin-top: 10px;
     }
 
     .choiceRow {
@@ -387,7 +388,8 @@ footer p{
     }
 
     .cityBtn {
-        width: 100%;
+        width: 95%;
+        margin-right: 0;
     }
 
     .col-xl-6, .box {
@@ -492,5 +494,10 @@ footer p{
     /* Change up the margin on the second setting button */
     .settingsBtn2 {
         margin: 8px 4%;
+    }
+
+    /* Adjust the the right margin on unitFormText so that way the top buttons and the bottom buttons line up */
+    .unitFormText {
+        margin-right: 10px;
     }
 }
