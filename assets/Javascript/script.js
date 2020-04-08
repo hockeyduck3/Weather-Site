@@ -14,6 +14,9 @@ var unitSpeed;
 // Trigger the load function
 load();
 
+// Hide the choices row at the start
+$('.choiceRow').hide();
+
 // When the search button is clicked
 $('.searchBtn, .searchBtn2').click(function (event) {
     if ($(event.target).hasClass('searchBtn2')) {
@@ -24,6 +27,23 @@ $('.searchBtn, .searchBtn2').click(function (event) {
     // Trigger searchbar function
     grabCityVal();
 });
+
+// When the navbar search is clicked on then the user's previous choices will fade in
+$('.navSearch').click(function() {
+    $('.choiceRow').fadeIn('slow');
+})
+
+// This function will check and see if the user clicked anywhere on the body of the webpage
+$(document.body).click(function(event) {
+    // If the user clicked the navbar search then do any empty return. This way the previous searches won't fade in then fade out immediately.
+    if ($(event.target).hasClass('searchBar2')) {
+        return;
+    } 
+    // If the user didn't click on the navbar search, then fade out of previous choices
+    else {
+        $('.choiceRow').fadeOut('fast');
+    }
+})
 
 // This function will check and see if the user clicked the 'Enter' key
 $('.firstSearch, .navSearch').on('keydown', function (event) {
@@ -50,7 +70,7 @@ $('.firstSearch, .navSearch').on('keydown', function (event) {
         }
 
         // If the 'Enter' key was not clicked then remove any errors on the screen
-        else {
+        else {        
             error();
         }
     }
@@ -61,10 +81,9 @@ $('.cityBtn').click(function () {
     // Set the variable which to navSearch since the first search bar will no longer be in use
     which = 'navSearch';
 
-    // Set the cityVal to the text of which ever button clicked it, set the queryURL and fiveDayURL, then trigger the searchCity function.
+    // Set the cityVal to the text of which ever button clicked it, set the queryURL, then trigger the searchCity function.
     cityVal = $(this).text();
     queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-    fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
     searchCity();
 })
 
@@ -114,38 +133,10 @@ function load() {
         $('.dateTime').text(momentFormat);
     }, 1000);
 
-    // Check and see if the user has not made any previous searches
-    switch (JSON.parse(localStorage.getItem('prevSearches')) === null) {
-        case true:
-            // If the above switch statement is true then the prevSearches array will be set to this default list
-            prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
-
-            // The text of previous searches will be set to 'Possible choices' 
-            $('.previousChoices').text('Possible choices');
-
-            // Then this function will go in and create buttons based on the prevSearches array
-            $(prevSearches).each(function (e) {
-                // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
-                var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
-
-                // Append the newly made buttons to .choiceRow
-                $('.choiceRow').append(button);
-            })
-            break;
-
-        // If the user has made previous searches 
-        default:
-            // The prevSearchs array will be set to the saved array in the user's local storage
-            prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
-
-            // Then this function will make buttons based off of the users
-            $(prevSearches).each(function (e) {
-                // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
-                var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
-
-                // Then appened the newly made button to .choiceRow
-                $('.choiceRow').append(button);
-            })
+    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
+        loadButtons1();
+    } else {
+        loadButons2();
     }
 
     // Check and see if the user does not have 'unit' set in their localStorage
@@ -186,10 +177,43 @@ function load() {
             searchCity();
             break;
         default:
-            $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').removeClass('hide');
+            $('.greetingText, .firstSearch, .settingsBtn1').removeClass('hide');
     }
 
     $('.beforeFooter').fadeIn('slow');
+}
+
+function loadButtons1() {
+    // Remove the hide class from the possible choices text
+    $('.possibleChoices').removeClass('hide');
+
+    // If the above switch statement is true then the prevSearches array will be set to this default list
+    prevSearches = ['Salt Lake City', 'Tampa', 'San Francisco', 'Houston'];
+
+    // Then this function will go in and create buttons based on the prevSearches array
+    $(prevSearches).each(function (e) {
+        // This will also add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
+        var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+
+        // Append the newly made buttons to .choiceRow
+        $('.possibleRow').append(button);
+    })
+}
+
+function loadButons2() {
+    $('.choiceRow').empty();
+
+    // The prevSearchs array will be set to the saved array in the user's local storage
+    prevSearches = JSON.parse(localStorage.getItem('prevSearches'));
+
+    // Then this function will make buttons based off of the users
+    $(prevSearches).each(function (e) {
+        // Add a property of type="button" and add the classes 'btn btn-secondary cityBtn' to each button
+        var button = $('<button>').text(prevSearches[e]).prop('type', 'button').addClass('btn btn-secondary cityBtn');
+
+        // Then appened the newly made button to .choiceRow
+        $('.choiceRow').append(button);
+    })
 }
 
 // This function will grab either the value from the first searchBar or the second one
@@ -206,9 +230,13 @@ function grabCityVal() {
     else {
         // Grab the value from the nav search bar and trim the whitespaces off of it
         cityVal = $('.searchBar2').val().trim();
-        $('.searchBar2').val('')
+        $('.searchBar2').val('');
     }
 
+    // Quickly fade out the previous choice buttons if they're showing
+    $('.choiceRow').fadeOut('fast');
+
+    // Run the searchBar function
     searchBar();
 }
 
@@ -343,7 +371,7 @@ function searchCity() {
         $('.cityName').text(name);
 
         //Hide the welcome screen 
-        $('.greetingText, .firstSearch, .previousChoices, .choiceRow, .settingsBtn1').hide();
+        $('.greetingText, .firstSearch, .settingsBtn1, .possibleChoices, .possibleRow').hide();
 
         // Fade in the results
         $('.card').fadeIn('slow');
@@ -375,8 +403,8 @@ function searchCity() {
         else {
             $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} ${unitSpeed}`);
         }
-        $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
 
+        $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
 
         // Trigger addToList function
         addToList();
@@ -432,6 +460,8 @@ function addToList() {
 
         // Then after all of that is done, save prevSearches to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+
+        // loadButons2();
     }
 
     /* If the user has made a previous searches and the user searches for the same city 
@@ -445,9 +475,12 @@ function addToList() {
 
         // Then save to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+
+        // loadButons2();
     }
 
-    localStorage.setItem('lastSearch', name)
+    // Save the latest search to the local storage, so that way when the page reloads it'll go back to the user's last search.
+    localStorage.setItem('lastSearch', name);
 }
 
 // Setting button functions
