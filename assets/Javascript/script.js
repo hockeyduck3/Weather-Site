@@ -15,7 +15,7 @@ var unitSpeed;
 load();
 
 // Hide the choices row at the start
-$('.choiceRow').hide();
+$('.prevDiv').hide();
 
 // When the search button is clicked
 $('.searchBtn, .searchBtn2').click(function (event) {
@@ -30,7 +30,7 @@ $('.searchBtn, .searchBtn2').click(function (event) {
 
 // When the navbar search is clicked on then the user's previous choices will fade in
 $('.navSearch').click(function() {
-    $('.choiceRow').fadeIn('slow');
+    $('.prevDiv').slideDown('slow');
 })
 
 // This function will check and see if the user clicked anywhere on the body of the webpage
@@ -39,9 +39,9 @@ $(document.body).click(function(event) {
     if ($(event.target).hasClass('searchBar2')) {
         return;
     } 
-    // If the user didn't click on the navbar search, then fade out of previous choices
+    // If the user didn't click on the navbar search, then have previous choices slide up to go way.
     else {
-        $('.choiceRow').fadeOut('fast');
+        $('.prevDiv').slideUp('fast');
     }
 })
 
@@ -66,6 +66,7 @@ $('.firstSearch, .navSearch').on('keydown', function (event) {
             // Set the var of which to 'navSearch'
             which = 'navSearch';
 
+            // Run the grabCityVal function
             grabCityVal()
         }
 
@@ -76,15 +77,21 @@ $('.firstSearch, .navSearch').on('keydown', function (event) {
     }
 })
 
-// Function for the city buttons
-$('.cityBtn').click(function () {
-    // Set the variable which to navSearch since the first search bar will no longer be in use
-    which = 'navSearch';
+// This adds a click event to both the Previous choice row and the possible choice row.
+$('.choiceRow, .possibleRow').on('click', function(event) {
+    // Check and if the click target was a button
+    if ($(event.target).is(':button')) {
+        // Set the variable text to the text of the button that was clicked
+        var text = $(event.target).text()
+        
+        // Set the variable which to navSearch since the first search bar will no longer be in use
+        which = 'navSearch';
 
-    // Set the cityVal to the text of which ever button clicked it, set the queryURL, then trigger the searchCity function.
-    cityVal = $(this).text();
-    queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-    searchCity();
+        // Set the cityVal to the text of which ever button was clicked, set the queryURL, then trigger the searchCity function.
+        cityVal = text;
+        queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        searchCity();
+    }
 })
 
 $('.timeBtn, .unitBtn').click(activeBtn);
@@ -133,9 +140,12 @@ function load() {
         $('.dateTime').text(momentFormat);
     }, 1000);
 
+    // This if statement will load up either the welcome buttons, or the user's previous searches. Depending on if they have made any searches.
     if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
+        // Load welcome buttons
         loadButtons1();
     } else {
+        // Load previous searches
         loadButons2();
     }
 
@@ -170,14 +180,15 @@ function load() {
 
     }
 
-    switch (localStorage.getItem('lastSearch') !== null) {
-        case true:
-            cityVal = localStorage.getItem('lastSearch');
-            queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-            searchCity();
-            break;
-        default:
-            $('.greetingText, .firstSearch, .settingsBtn1').removeClass('hide');
+    // This will check and see if the user has made a search recently
+    if (localStorage.getItem('lastSearch') !== null) {
+        // if they have then cityVal will be set to their last search item and the page will load
+        cityVal = localStorage.getItem('lastSearch');
+        queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        searchCity();
+    } else {
+        // If they have not made a search or have cleared their storage, then the welcome page will show instead.
+        $('.greetingText, .firstSearch, .settingsBtn1').removeClass('hide');
     }
 
     $('.beforeFooter').fadeIn('slow');
@@ -234,7 +245,7 @@ function grabCityVal() {
     }
 
     // Quickly fade out the previous choice buttons if they're showing
-    $('.choiceRow').fadeOut('fast');
+    $('.prevDiv').slideUp('fast');
 
     // Run the searchBar function
     searchBar();
@@ -317,19 +328,36 @@ function searchCity() {
             url: oneCallUrl,
             method: 'GET'
         }).then(function(oneCallRepsponse) {
+            // Log the response
             console.log(oneCallRepsponse);
 
+            // Set the text to the UV Index number
             $('.uviInfo').text(oneCallRepsponse.current.uvi);
 
+            // This if else will run and check where the UV Index is at.
+
+            // If the UVI is greater than or equal to eleven, then set the background to purple and reset the text color to white.
             if (oneCallRepsponse.current.uvi >= 11) {
                 $('.uviInfo').css({'background-color': 'purple', 'color': 'white'});
-            } else if (oneCallRepsponse.current.uvi >= 8) {
+            } 
+            
+            // If the UVI is greater than or equal to 8, set the background to red and reset the text color to white.
+            else if (oneCallRepsponse.current.uvi >= 8) {
                 $('.uviInfo').css({'background-color': 'red', 'color': 'white'});
-            } else if (oneCallRepsponse.current.uvi >= 6) {
+            } 
+            
+            // If the UVI is greater than or equal to 6, set the background to orange and reset the text color to white.
+            else if (oneCallRepsponse.current.uvi >= 6) {
                 $('.uviInfo').css({'background-color': 'orange', 'color': 'white'});
-            } else if (oneCallRepsponse.current.uvi >= 3) {
+            } 
+            
+            // If the UVI is greater than or equal to 3, set the background to yellow and set the text color to black. This one is special because white text on a yellow background is difficult to read.
+            else if (oneCallRepsponse.current.uvi >= 3) {
                 $('.uviInfo').css({'background-color': 'yellow', 'color': 'black'});
-            } else {
+            } 
+            
+            // Finally if none of the above run, then set the UVI background to green and reset the text color to white.
+            else {
                 $('.uviInfo').css({'background-color': 'green', 'color': 'white'});
             }
 
@@ -393,6 +421,7 @@ function searchCity() {
         $('.high').text(`High of: ${(response.main.temp_max).toFixed(1)} ${unitTemp}`);
         $('.cloud').text(`Cloud percentage: ${response.clouds.all}%`);
         $('.humidity').text(`Humidity: ${response.main.humidity}%`);
+        $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
 
         // If the user prefers the metric system
         if (unit == 'metric') {
@@ -404,9 +433,7 @@ function searchCity() {
             $('.wind').text(`Wind Speed: ${(response.wind.speed).toFixed(1)} ${unitSpeed}`);
         }
 
-        $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
-
-        // Trigger addToList function
+        // Run the addToList function
         addToList();
 
         // If the ajax request fails
@@ -460,8 +487,6 @@ function addToList() {
 
         // Then after all of that is done, save prevSearches to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
-
-        // loadButons2();
     }
 
     /* If the user has made a previous searches and the user searches for the same city 
@@ -475,10 +500,11 @@ function addToList() {
 
         // Then save to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
-
-        // loadButons2();
     }
-
+    
+    // Refresh the buttons
+    loadButons2();
+    
     // Save the latest search to the local storage, so that way when the page reloads it'll go back to the user's last search.
     localStorage.setItem('lastSearch', name);
 }
