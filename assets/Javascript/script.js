@@ -5,6 +5,7 @@ var fiveDayURL;
 var prevSearches = [];
 var errorMes = $('.error');
 var name;
+var prev = '';
 var which = 'firstSearch';
 var timeForm;
 var unit;
@@ -29,16 +30,22 @@ $('.searchBtn, .searchBtn2').click(function (event) {
 });
 
 // When the navbar search is clicked on then the user's previous choices will fade in
-$('.navSearch').click(function() {
-    $('.prevDiv').slideDown('slow');
+$('.searchBar2').click(function () {
+    // This if statement will check and see if the user has made any previous searches
+    if (JSON.parse(localStorage.getItem('prevSearches')) !== null) {
+        // If they have then show them their previous searches
+        $('.prevDiv').slideDown('slow');
+    }
 })
 
 // This function will check and see if the user clicked anywhere on the body of the webpage
-$(document.body).click(function(event) {
+$(document.body).click(function (event) {
     // If the user clicked the navbar search then do any empty return. This way the previous searches won't fade in then fade out immediately.
     if ($(event.target).hasClass('searchBar2')) {
         return;
-    } 
+    } else if ($(event.target).hasClass('searchBtn2')) {
+        return;
+    }
     // If the user didn't click on the navbar search, then have previous choices slide up to go way.
     else {
         $('.prevDiv').slideUp('fast');
@@ -71,19 +78,19 @@ $('.firstSearch, .navSearch').on('keydown', function (event) {
         }
 
         // If the 'Enter' key was not clicked then remove any errors on the screen
-        else {        
+        else {
             error();
         }
     }
 })
 
 // This adds a click event to both the Previous choice row and the possible choice row.
-$('.choiceRow, .possibleRow').on('click', function(event) {
+$('.choiceRow, .possibleRow').on('click', function (event) {
     // Check and if the click target was a button
     if ($(event.target).is(':button')) {
         // Set the variable text to the text of the button that was clicked
         var text = $(event.target).text()
-        
+
         // Set the variable which to navSearch since the first search bar will no longer be in use
         which = 'navSearch';
 
@@ -95,7 +102,6 @@ $('.choiceRow, .possibleRow').on('click', function(event) {
 })
 
 $('.timeBtn, .unitBtn').click(activeBtn);
-
 $('.saveBtn').click(save);
 $('.cancelBtn').click(cancel);
 
@@ -244,9 +250,6 @@ function grabCityVal() {
         $('.searchBar2').val('');
     }
 
-    // Quickly fade out the previous choice buttons if they're showing
-    $('.prevDiv').slideUp('fast');
-
     // Run the searchBar function
     searchBar();
 }
@@ -282,6 +285,9 @@ function searchBar() {
         // If it is, then the queryURL will search by city name
         queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
+        // Quickly fade out the previous choice buttons if they're showing
+        $('.prevDiv').slideUp('fast');
+
         // Then trigger the searchCity function
         searchCity();
     }
@@ -290,6 +296,9 @@ function searchBar() {
     else if (cityVal.match(/[0-9]/)) {
         // If it is, then the queryURL will search by zip code instead
         queryURL = `https://api.openweathermap.org/data/2.5/weather?zip=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+
+        // Quickly fade out the previous choice buttons if they're showing
+        $('.prevDiv').slideUp('fast');
 
         // Then trigger the searchCity function
         searchCity();
@@ -321,13 +330,13 @@ function searchCity() {
     }).then(function (response) {
         // Console log the response
         console.log(response);
-        
+
         var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
-        
+
         $.ajax({
             url: oneCallUrl,
             method: 'GET'
-        }).then(function(oneCallRepsponse) {
+        }).then(function (oneCallRepsponse) {
             // Log the response
             console.log(oneCallRepsponse);
 
@@ -338,27 +347,27 @@ function searchCity() {
 
             // If the UVI is greater than or equal to eleven, then set the background to purple and reset the text color to white.
             if (oneCallRepsponse.current.uvi >= 11) {
-                $('.uviInfo').css({'background-color': 'purple', 'color': 'white'});
-            } 
-            
+                $('.uviInfo').css({ 'background-color': 'purple', 'color': 'white' });
+            }
+
             // If the UVI is greater than or equal to 8, set the background to red and reset the text color to white.
             else if (oneCallRepsponse.current.uvi >= 8) {
-                $('.uviInfo').css({'background-color': 'red', 'color': 'white'});
-            } 
-            
+                $('.uviInfo').css({ 'background-color': 'red', 'color': 'white' });
+            }
+
             // If the UVI is greater than or equal to 6, set the background to orange and reset the text color to white.
             else if (oneCallRepsponse.current.uvi >= 6) {
-                $('.uviInfo').css({'background-color': 'orange', 'color': 'white'});
-            } 
-            
+                $('.uviInfo').css({ 'background-color': 'orange', 'color': 'white' });
+            }
+
             // If the UVI is greater than or equal to 3, set the background to yellow and set the text color to black. This one is special because white text on a yellow background is difficult to read.
             else if (oneCallRepsponse.current.uvi >= 3) {
-                $('.uviInfo').css({'background-color': 'yellow', 'color': 'black'});
-            } 
-            
+                $('.uviInfo').css({ 'background-color': 'yellow', 'color': 'black' });
+            }
+
             // Finally if none of the above run, then set the UVI background to green and reset the text color to white.
             else {
-                $('.uviInfo').css({'background-color': 'green', 'color': 'white'});
+                $('.uviInfo').css({ 'background-color': 'green', 'color': 'white' });
             }
 
             // This list will be used to grab list 0, 8, 16, 24, 32, then grab specific info from those lists
@@ -391,7 +400,7 @@ function searchCity() {
                 $(`.humidity${e}`).text(`Humidity: ${oneCallRepsponse.daily[numberList[e]].humidity}%`);
             })
         })
-        
+
         // Set the variable name to the city name given by OpenWeather
         name = response.name;
 
@@ -454,35 +463,57 @@ function searchCity() {
 
 // Function for saving user's previous searches
 function addToList() {
-    // This will check and see if the user has made any previous searches
-    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
+    // If the vairable of prev is equal to an empty string
+    if (prev === '') {
+        // Set prev to the string of name
+        prev = name;
+    }
+
+    // If prev is equal to name
+    if (prev === name) {
+        // Set name to the local storage
+        localStorage.setItem('lastSearch', name);
+
+        // Then return
+        return;
+    } 
+    
+    // If prev is not equal to name then check and see if the user has not made any previous searches
+    else if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
         /*If the user has not made any previous searches
         prevSearches will be set to an empty array */
         prevSearches = [];
 
-        // Then the user's latest search will be added to the prevSearches arrray
-        prevSearches.push(name);
+        // Then the user's previous search will be added to the prevSearches arrray
+        prevSearches.push(prev);
 
-        // Then set the item into the user's local storage using JSON's stringify method
+        // Then save prevSearches into the user's local storage using JSON's stringify method
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
-    }
 
-    /* If the user had made previous searches before then this else if statement will check and see if the latest search is already saved in the list. 
-    if it is already saved then the bottom else statement will run. This is to prevent the same city from showing up more than once on the previous searches list. */
-    else if (prevSearches.indexOf(name) === -1) {
-        // If the city is not on the list, then this if statement will check and see if the prevSearches array is at 4 or more than 4.
-        if (prevSearches.length >= 4) {
-            // If it is, then this will pop out the last item in the array
-            prevSearches.pop();
+    } 
+    
+    // If the user has made previous searches then check and see if the user's previous search is already in the list
+    else if (prevSearches.indexOf(prev) === -1) {
+
+        // If the previous seach is not on the list, then this if statement will check and see if the prevSearches array length is at 6 or more than 6.
+        if (prevSearches.length >= 6) {
+            // If it is, then this will check and see if the user's latest search is on the list
+            if (prevSearches.indexOf(name) !== -1) {
+                // If it is then it gets cut out
+                prevSearches.splice(prevSearches.indexOf(name), 1);
+            } else {
+                // If it's not then the last search in the array will get taken out of the array.
+                prevSearches.pop();
+            }
 
             // Then set the latest search to the front of the array
-            prevSearches.unshift(name);
+            prevSearches.unshift(prev);
         }
 
-        // If prevSearches is less than 4
+        // If prevSearches is less than 6
         else {
-            // Then just add the latest search to the front of the array
-            prevSearches.unshift(name);
+            // Then just add the previous search to the front of the array
+            prevSearches.unshift(prev);
         }
 
         // Then after all of that is done, save prevSearches to the local storage using JSON stringify
@@ -490,23 +521,35 @@ function addToList() {
     }
 
     /* If the user has made a previous searches and the user searches for the same city 
-    This else statement will run and make sure that the users latest search is always first in the array*/
+    This else statement will run and make sure that the users previous search is always first in the array*/
     else {
         // This will slice out the city from within the array
-        prevSearches.splice(prevSearches.indexOf(name), 1);
+        prevSearches.splice(prevSearches.indexOf(prev), 1);
 
         // Then after it slices it, it will re-add the item to the front of the array
-        prevSearches.unshift(name);
+        prevSearches.unshift(prev);
 
         // Then save to the local storage using JSON stringify
         localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
     }
-    
+
+    // This last if statement will check if the user's latest search is in the list
+    if (prevSearches.indexOf(name) !== -1) {
+        // If it is the splice it out of the array
+        prevSearches.splice(prevSearches.indexOf(name), 1);
+
+        // And resave the list to the user's local storage
+        localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+    }
+
     // Refresh the buttons
     loadButons2();
-    
+
     // Save the latest search to the local storage, so that way when the page reloads it'll go back to the user's last search.
     localStorage.setItem('lastSearch', name);
+
+    // Set prev to the user's latest search
+    prev = name;
 }
 
 // Setting button functions
