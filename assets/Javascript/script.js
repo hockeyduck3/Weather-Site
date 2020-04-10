@@ -466,31 +466,37 @@ function searchCity() {
             // Set the text to the UV Index number
             $('.uviInfo').text(currentUVI);
 
+            if (currentUVI >= 3 && currentUVI <= 6) {
+                $('.uviInfo').css('color', 'black');
+            } else {
+                $('.uviInfo').css('color', 'white');       
+            }
+
             // This if else will run and check where the UV Index is at.
 
             // If the UVI is greater than or equal to eleven, then set the background to purple and reset the text color to white.
             if (currentUVI >= 11) {
-                $('.uviInfo').css({ 'background-color': 'purple', 'color': 'white' });
+                $('.uviInfo').css('background-color', 'purple');
             }
 
             // If the UVI is greater than or equal to 8, set the background to red and reset the text color to white.
             else if (currentUVI >= 8) {
-                $('.uviInfo').css({ 'background-color': 'red', 'color': 'white' });
+                $('.uviInfo').css('background-color', 'red');
             }
 
             // If the UVI is greater than or equal to 6, set the background to orange and reset the text color to white.
             else if (currentUVI >= 6) {
-                $('.uviInfo').css({ 'background-color': 'orange', 'color': 'white' });
+                $('.uviInfo').css('background-color', 'orange');
             }
 
             // If the UVI is greater than or equal to 3, set the background to yellow and set the text color to black. This one is special because white text on a yellow background is difficult to read.
             else if (currentUVI >= 3) {
-                $('.uviInfo').css({ 'background-color': 'yellow', 'color': 'black' });
+                $('.uviInfo').css('background-color', 'yellow');
             }
 
             // Finally if none of the above run, then set the UVI background to green and reset the text color to white.
             else {
-                $('.uviInfo').css({ 'background-color': 'green', 'color': 'white' });
+                $('.uviInfo').css('background-color', 'green');
             }
 
             // This list will be used to grab list 1, 2, 3, 4, 5, then grab specific info from those lists
