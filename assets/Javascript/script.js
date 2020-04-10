@@ -6,7 +6,8 @@ var prevSearches = [];
 var errorMes = $('.error');
 var name;
 var prev = '';
-var which = 'firstSearch';
+var whichSearch = 'firstSearch';
+var momentFormat;
 var timeForm;
 var unit;
 var unitTemp;
@@ -15,14 +16,11 @@ var unitSpeed;
 // Trigger the load function
 load();
 
-// Hide the choices row at the start
-$('.prevDiv').hide();
-
 // When the search button is clicked
 $('.searchBtn, .searchBtn2').click(function (event) {
     if ($(event.target).hasClass('searchBtn2')) {
         // Set the var of which to 'navSearch'
-        which = 'navSearch';
+        whichSearch = 'navSearch';
     }
 
     // Trigger searchbar function
@@ -40,12 +38,13 @@ $('.searchBar2').click(function () {
 
 // This function will check and see if the user clicked anywhere on the body of the webpage
 $(document.body).click(function (event) {
-    // If the user clicked the navbar search then do any empty return. This way the previous searches won't fade in then fade out immediately.
+    // If the user clicked the navbar search or the search button then do any empty return. This way the previous searches won't fade in then fade out immediately.
     if ($(event.target).hasClass('searchBar2')) {
         return;
     } else if ($(event.target).hasClass('searchBtn2')) {
         return;
     }
+    
     // If the user didn't click on the navbar search, then have previous choices slide up to go way.
     else {
         $('.prevDiv').slideUp('fast');
@@ -54,24 +53,24 @@ $(document.body).click(function (event) {
 
 // This function will check and see if the user clicked the 'Enter' key
 $('.firstSearch, .navSearch').on('keydown', function (event) {
-
+    // Check and see if the user hit enter on the welcome page search bar
     if ($(event.target).hasClass('searchBar')) {
-        // If the 'Enter' key is clicked then run the searchBar function
+        // If the 'Enter' key is clicked then run the grabCityVal function
         if (event.keyCode === 13) {
             // Trigger grabCityVal function
             grabCityVal();
         }
         // If the 'Enter' key was not clicked then remove any errors on the screen
         else {
-            error();
+            errorRemove();
         }
     }
 
     else {
         //If the 'Enter' key is clicked then run the searchBar function
         if (event.keyCode === 13) {
-            // Set the var of which to 'navSearch'
-            which = 'navSearch';
+            // Set the var of whichSearch to 'navSearch'
+            whichSearch = 'navSearch';
 
             // Run the grabCityVal function
             grabCityVal()
@@ -79,7 +78,7 @@ $('.firstSearch, .navSearch').on('keydown', function (event) {
 
         // If the 'Enter' key was not clicked then remove any errors on the screen
         else {
-            error();
+            errorRemove();
         }
     }
 })
@@ -91,8 +90,8 @@ $('.choiceRow, .possibleRow').on('click', function (event) {
         // Set the variable text to the text of the button that was clicked
         var text = $(event.target).text()
 
-        // Set the variable which to navSearch since the first search bar will no longer be in use
-        which = 'navSearch';
+        // Set the variable whichSearch to navSearch since the first search bar will no longer be in use
+        whichSearch = 'navSearch';
 
         // Set the cityVal to the text of which ever button was clicked, set the queryURL, then trigger the searchCity function.
         cityVal = text;
@@ -101,19 +100,138 @@ $('.choiceRow, .possibleRow').on('click', function (event) {
     }
 })
 
-$('.timeBtn, .unitBtn').click(activeBtn);
-$('.saveBtn').click(save);
-$('.cancelBtn').click(cancel);
+// When the time button or the unit button in the settings modal is clicked
+$('.timeBtn, .unitBtn').click(function () {
+    // Check and see if the user clicked on either the 12-Hour button or the 24-Hour button
+    if ($(this).hasClass('12HourBtn') || $(this).hasClass('24HourBtn')) {
+        // Check and see if the user clicked on the 12-hour button
+        switch ($(this).hasClass('12HourBtn')) {
+            // If they did click on the 12-hour button
+            case true:
+                // Check and see if the 12-hour button is currently active
+                if ($(this).hasClass('active')) {
+                    // If it is then do an empty return
+                    return;
+                } else {
+                    // If it's not then take the active class off of 24-hour button and add it to the 12-hour button
+                    $('.24HourBtn').removeClass('active');
+                    $('.12HourBtn').addClass('active');
+                }
+                break;
+                
+            // If the 12-hour button was not seleceted then that means the 24-hour button was selected instead 
+            default:
+                // Check and see if the 24-hour button has the class of active on it
+                if ($(this).hasClass('active')) {
+                    // If it does then do an empty return
+                    return;
+                } else {
+                    // If it's not then remove the active class from the 12-hour button and add it to the 24-hour button
+                    $('.12HourBtn').removeClass('active');
+                    $('.24HourBtn').addClass('active');
+                }
+        }
+    }
+
+    // If neither were picked, then it was one of the unit buttons
+    else {
+        // Check and see if the imperial button was clicked
+        switch ($(this).hasClass('imperialBtn')) {
+            // If they did click the imperial button
+            case true:
+                // Check and see if the imperial button has a class of active on it
+                if ($(this).hasClass('active')) {
+                    // If it does then do an empty return
+                    return;
+                } else {
+                    // If it does not then remove the class of active off of the metric button and add it to the imperial button
+                    $('.metricBtn').removeClass('active');
+                    $('.imperialBtn').addClass('active');
+                }
+                break;
+            // If they didn't click on the imperial button then that means the metric button was selected instead
+            default:
+                // Check and see if the metric button has the active class on it
+                if ($(this).hasClass('active')) {
+                    // If it does then do an empty return
+                    return;
+                } else {
+                    // If it does not then remove the class of active from the imperial button and add it to the metric button
+                    $('.imperialBtn').removeClass('active');
+                    $('.metricBtn').addClass('active');
+                }
+        }
+    }
+});
+
+// When the save button is clicked
+$('.saveBtn').click(function () {
+     // If the user chose 12-Hour time
+     if ($('.12HourBtn').hasClass('active')) {
+        localStorage.setItem('clock', 12);
+    }
+    // If the user chose 24-Hour time
+    else {
+        localStorage.setItem('clock', 24);
+    }
+
+    // If the user chose Imperial
+    if ($('.imperialBtn').hasClass('active')) {
+        localStorage.setItem('unit', 'imperial');
+    }
+    // If the user chose Metric
+    else {
+        localStorage.setItem('unit', 'metric');
+    }
+
+    // Refresh the page so that the changes can take place
+    location.reload();
+});
+
+// When the cancel button is clicked trigger the cancel function
+$('.cancelBtn').click(function () {
+    // Check and see if the clock in localStorage is 24
+    switch (localStorage.getItem('clock') == '24') {
+        // If it is then switch the 24-Hour button to active
+        case true:
+            $('.12HourBtn').removeClass('active');
+            $('.24HourBtn').addClass('active');
+            break;
+
+        // It it's not then switch the 12-Hour button to active
+        default:
+            $('.24HourBtn').removeClass('active');
+            $('.12HourBtn').addClass('active');
+    }
+
+    // Check and see if unit in localStorage is set to metric
+    switch (unit == 'metric') {
+        // If it is then switch the Metric button to active
+        case true:
+            $('.imperialBtn').removeClass('active');
+            $('.metricBtn').addClass('active');
+            break;
+
+        // If it's not then set the Imperial button to active
+        default:
+            $('.metricBtn').removeClass('active');
+            $('.imperialBtn').addClass('active');
+    }
+});
 
 // Load function
 function load() {
+    // Hide the choices row at the start
+    $('.prevDiv').hide();
+    $('.previousText').removeClass('hide');
+
     // Check and see if 'clock' is not in the local storage
     switch (localStorage.getItem('clock') === null) {
         // If true then set 'clock' to 12 in the user's local storage, and set the timeForm variable to 12 and the momentFormat to 12-Hour format.
         case true:
             localStorage.setItem('clock', 12);
-            timeForm == 12;
-            var momentFormat = moment().format('llll');
+            timeForm = 12;
+            momentFormat = moment().format('llll');
             break;
 
         // If 'clock' is set in the user's local storage
@@ -129,12 +247,12 @@ function load() {
                     $('.24HourBtn').addClass('active');
 
                     // And format the dateTime text to 24-Hour format
-                    var momentFormat = moment().format("ddd, ll HH:mm");
+                    momentFormat = moment().format("ddd, ll HH:mm");
                     break;
 
                 // If it's set to 12 then format the dateTime text to 12-Hour format
                 default:
-                    var momentFormat = moment().format('llll');
+                    momentFormat = moment().format('llll');
             }
     }
 
@@ -145,15 +263,6 @@ function load() {
     setInterval(function () {
         $('.dateTime').text(momentFormat);
     }, 1000);
-
-    // This if statement will load up either the welcome buttons, or the user's previous searches. Depending on if they have made any searches.
-    if (JSON.parse(localStorage.getItem('prevSearches')) === null) {
-        // Load welcome buttons
-        loadButtons1();
-    } else {
-        // Load previous searches
-        loadButons2();
-    }
 
     // Check and see if the user does not have 'unit' set in their localStorage
     switch (localStorage.getItem('unit') === null) {
@@ -168,7 +277,7 @@ function load() {
         // If the user does have 'unit' saved to their local storage
         default:
             // Check and see if the user prefers metric
-            switch (localStorage.getItem('unit') == 'metric') {
+            switch (localStorage.getItem('unit') === 'metric') {
                 // If true then change the unit variables to metric and makes the metric button active in the settings modal
                 case true:
                     unit = localStorage.getItem('unit');
@@ -194,14 +303,29 @@ function load() {
         searchCity();
     } else {
         // If they have not made a search or have cleared their storage, then the welcome page will show instead.
+        $('.greetingText, .firstSearch, .settingsBtn1').hide();
         $('.greetingText, .firstSearch, .settingsBtn1').removeClass('hide');
+        $('.greetingText, .firstSearch, .settingsBtn1').fadeIn('slow');
     }
 
+    // This if statement will load up either the welcome buttons, or the user's previous searches. Depending on if they have made any searches.
+    if (JSON.parse(localStorage.getItem('prevSearches')) === null && localStorage.getItem('lastSearch') === null) {
+        // Load welcome buttons
+        loadButtons1();
+    } else {
+        // Load previous searches
+        loadButons2();
+    }
+
+    // Fade in the github link
     $('.beforeFooter').fadeIn('slow');
 }
 
 function loadButtons1() {
-    // Remove the hide class from the possible choices text
+    // Hide the possible choice and it's header text using jQuery's hide function
+    $('.possibleChoices, .possibleRow').hide();
+
+    // Then on the possible choice header text from the class of hide from it
     $('.possibleChoices').removeClass('hide');
 
     // If the above switch statement is true then the prevSearches array will be set to this default list
@@ -215,9 +339,13 @@ function loadButtons1() {
         // Append the newly made buttons to .choiceRow
         $('.possibleRow').append(button);
     })
+
+    // After everything is done loading, fade everything in.
+    $('.possibleChoices, .possibleRow').fadeIn('slow');
 }
 
 function loadButons2() {
+    // This is to make sure that there is nothing in the div
     $('.choiceRow').empty();
 
     // The prevSearchs array will be set to the saved array in the user's local storage
@@ -235,10 +363,10 @@ function loadButons2() {
 
 // This function will grab either the value from the first searchBar or the second one
 function grabCityVal() {
-    // The var which will tell the code which one to look for
+    // The var whichSearch will tell the code whichSearch one to look for
 
-    // If the var which is set to 'firstSearch'
-    if (which === 'firstSearch') {
+    // If the var whichSearch is set to 'firstSearch'
+    if (whichSearch === 'firstSearch') {
         // Grab the value from the search bar and trim the whitespaces off of it
         cityVal = $('.searchBar').val().trim();
     }
@@ -261,23 +389,17 @@ function searchBar() {
         // Display this error message
         errorMes.text('Field cannot be empty');
 
-        if (which == 'firstSearch') {
-            $('.mainError').slideDown('600');
-        } else {
-            $('.error2').slideDown('600');
-        }
+        // Run the display error function
+        displayError();
     }
 
-    // If cityVal is not empty, then this will check and see if there is both a city name and a zipcode in the search bar.
+    // If cityVal is not empty, then this will check and see if there are both letters and numbers in the search bar.
     else if (cityVal.match(/[a-z]/) && cityVal.match(/[0-9]/)) {
         // If there is both a city name and a zip code, then this error message will display.
         errorMes.text('Please only search for a city or zip');
 
-        if (which == 'firstSearch') {
-            $('.mainError').slideDown('600');
-        } else {
-            $('.error2').slideDown('600');
-        }
+        // Run the display error function
+        displayError();
     }
 
     // If neither error messages are displayed, then this will check and see if cityVal is a city. 
@@ -309,18 +431,15 @@ function searchBar() {
         // Then this error message will display
         errorMes.text('Text cannot be read');
 
-        if (which == 'firstSearch') {
-            $('.mainError').slideDown('600');
-        } else {
-            $('.error2').slideDown('600');
-        }
+        // Run the display error function
+        displayError();
     }
 }
 
 // Search city function
 function searchCity() {
-    // Just in case if the error is still on the screen run the error function
-    error();
+    // Just in case if the error is still on the screen run the errorRemove function
+    errorRemove();
 
     // Make an ajax request to openweather api
     $.ajax({
@@ -340,28 +459,32 @@ function searchCity() {
             // Log the response
             console.log(oneCallRepsponse);
 
+            var currentUVI = oneCallRepsponse.current.uvi;
+
+            var daily = oneCallRepsponse.daily;
+
             // Set the text to the UV Index number
-            $('.uviInfo').text(oneCallRepsponse.current.uvi);
+            $('.uviInfo').text(currentUVI);
 
             // This if else will run and check where the UV Index is at.
 
             // If the UVI is greater than or equal to eleven, then set the background to purple and reset the text color to white.
-            if (oneCallRepsponse.current.uvi >= 11) {
+            if (currentUVI >= 11) {
                 $('.uviInfo').css({ 'background-color': 'purple', 'color': 'white' });
             }
 
             // If the UVI is greater than or equal to 8, set the background to red and reset the text color to white.
-            else if (oneCallRepsponse.current.uvi >= 8) {
+            else if (currentUVI >= 8) {
                 $('.uviInfo').css({ 'background-color': 'red', 'color': 'white' });
             }
 
             // If the UVI is greater than or equal to 6, set the background to orange and reset the text color to white.
-            else if (oneCallRepsponse.current.uvi >= 6) {
+            else if (currentUVI >= 6) {
                 $('.uviInfo').css({ 'background-color': 'orange', 'color': 'white' });
             }
 
             // If the UVI is greater than or equal to 3, set the background to yellow and set the text color to black. This one is special because white text on a yellow background is difficult to read.
-            else if (oneCallRepsponse.current.uvi >= 3) {
+            else if (currentUVI >= 3) {
                 $('.uviInfo').css({ 'background-color': 'yellow', 'color': 'black' });
             }
 
@@ -370,15 +493,16 @@ function searchCity() {
                 $('.uviInfo').css({ 'background-color': 'green', 'color': 'white' });
             }
 
-            // This list will be used to grab list 0, 8, 16, 24, 32, then grab specific info from those lists
+            // This list will be used to grab list 1, 2, 3, 4, 5, then grab specific info from those lists
             var numberList = [1, 2, 3, 4, 5];
 
+            // Instead of running a for loop, run a .each for the 5-day forecast
             $(numberList).each(function (e) {
                 // Set the sorce of dateImg0, 1, 2, 3, 4, to the weather icon provided by the OpenWeather api
-                $(`.dateImg${e}`).attr('src', `https://openweathermap.org/img/wn/${oneCallRepsponse.daily[numberList[e]].weather[0].icon}@2x.png`);
+                $(`.dateImg${e}`).attr('src', `https://openweathermap.org/img/wn/${daily[numberList[e]].weather[0].icon}@2x.png`);
 
                 // unixTime will grab the date text from the response and cut off the time. For example, the final output should look some like '2020-04-04'
-                var unixTime = moment.unix(oneCallRepsponse.daily[numberList[e]].dt);
+                var unixTime = moment.unix(daily[numberList[e]].dt);
 
                 // This variable uses the moment.js to format the above date string and format to look nicer. For example, the final output should look like 'Sat, Apr 4th'
                 var dateText = moment(unixTime).format("ddd, MMM Do");
@@ -386,23 +510,28 @@ function searchCity() {
                 // Assign the dateText var to date0, 1, 2, 3, 4
                 $(`.date${e}`).text(dateText);
 
-                $(`.temp${e}`).text(`Temp: ${(oneCallRepsponse.daily[numberList[e]].temp.day).toFixed(1)} ${unitTemp}`);
+                // Assign the temperature for that day to temp0, 1, 2, 3, 4
+                $(`.temp${e}`).text(`Temp: ${(daily[numberList[e]].temp.day).toFixed(1)} ${unitTemp}`);
 
                 // // If the user prefers the metric system
-                if (unit == 'metric') {
+                if (unit === 'metric') {
                     // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
-                    $(`.wind${e}`).text(`Wind: ${((oneCallRepsponse.daily[numberList[e]].wind_speed) * 3.6).toFixed(1)} ${unitSpeed}`);
+                    $(`.wind${e}`).text(`Wind: ${((daily[numberList[e]].wind_speed) * 3.6).toFixed(1)} ${unitSpeed}`);
                 }
                 // If the user prefers the imperial system, then the text will just be set to mph.
                 else {
-                    $(`.wind${e}`).text(`Wind: ${(oneCallRepsponse.daily[numberList[e]].wind_speed).toFixed(1)} ${unitSpeed}`);
+                    $(`.wind${e}`).text(`Wind: ${(daily[numberList[e]].wind_speed).toFixed(1)} ${unitSpeed}`);
                 }
-                $(`.humidity${e}`).text(`Humidity: ${oneCallRepsponse.daily[numberList[e]].humidity}%`);
+
+                // Assign the humidity for that day to humidity0, 1, 2, 3, 4
+                $(`.humidity${e}`).text(`Humidity: ${daily[numberList[e]].humidity}%`);
             })
         })
 
         // Set the variable name to the city name given by OpenWeather
         name = response.name;
+
+        var main = response.main;
 
         // Change the card title the name of the city from the response
         $('.cityName').text(name);
@@ -418,6 +547,7 @@ function searchCity() {
 
         // This variable is grabbing the description text from OpenWeather, and setting the first letter in the string to a capitol letter.
         var descText = (response.weather[0].description.charAt(0).toUpperCase() + response.weather[0].description.substr(1).toLowerCase());
+
         // Then setting descText to the text of description
         $('.description').text(descText);
 
@@ -425,15 +555,15 @@ function searchCity() {
         $('.icon').attr('src', `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
 
         // Set the text of each item to data collected from the OpenWeather api
-        $('.temp').text(`Temperature: ${(response.main.temp).toFixed(1)} ${unitTemp}`);
-        $('.low').text(`Low of: ${(response.main.temp_min).toFixed(1)} ${unitTemp}`);
-        $('.high').text(`High of: ${(response.main.temp_max).toFixed(1)} ${unitTemp}`);
+        $('.temp').text(`Temperature: ${(main.temp).toFixed(1)} ${unitTemp}`);
+        $('.low').text(`Low of: ${(main.temp_min).toFixed(1)} ${unitTemp}`);
+        $('.high').text(`High of: ${(main.temp_max).toFixed(1)} ${unitTemp}`);
         $('.cloud').text(`Cloud percentage: ${response.clouds.all}%`);
-        $('.humidity').text(`Humidity: ${response.main.humidity}%`);
-        $('.pressure').text(`Pressure: ${response.main.pressure} hpa`);
+        $('.humidity').text(`Humidity: ${main.humidity}%`);
+        $('.pressure').text(`Pressure: ${main.pressure} hpa`);
 
         // If the user prefers the metric system
-        if (unit == 'metric') {
+        if (unit === 'metric') {
             // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
             $('.wind').text(`Wind Speed: ${((response.wind.speed) * 3.6).toFixed(1)} ${unitSpeed}`);
         }
@@ -453,11 +583,7 @@ function searchCity() {
         // Display what the error was to the user
         errorMes.text(`Error ${error.responseJSON.cod}: ${error.responseJSON.message}`);
 
-        if (which == 'firstSearch') {
-            $('.mainError').slideDown('600');
-        } else {
-            $('.error2').slideDown('600');
-        }
+        displayError()
     })
 }
 
@@ -552,107 +678,21 @@ function addToList() {
     prev = name;
 }
 
-// Setting button functions
-function activeBtn() {
-    // Check and see if the user clicked on either the 12-Hour button or the 24-Hour button
-    if ($(this).hasClass('12HourBtn') || $(this).hasClass('24HourBtn')) {
-        switch ($(this).hasClass('12HourBtn')) {
-            case true:
-                if ($(this).hasClass('active')) {
-                    return;
-                } else {
-                    $('.24HourBtn').removeClass('active');
-                    $('.12HourBtn').addClass('active');
-                }
-                break;
-            default:
-                if ($(this).hasClass('active')) {
-                    return;
-                } else {
-                    $('.12HourBtn').removeClass('active');
-                    $('.24HourBtn').addClass('active');
-                }
-        }
-    }
-
-    // If neither were picked, then it was one of the unit buttons
+// Function for displaying error messages
+function displayError() {
+    // This if statement will check and see if the user was typing on the welcome search bar
+    if (whichSearch === 'firstSearch') {
+        // If so then it will display the error underneath that
+        $('.mainError').slideDown('600');
+    } 
+    // Or if it was the navbar search bar
     else {
-        switch ($(this).hasClass('imperialBtn')) {
-            case true:
-                if ($(this).hasClass('active')) {
-                    return;
-                } else {
-                    $('.metricBtn').removeClass('active');
-                    $('.imperialBtn').addClass('active');
-                }
-                break;
-            default:
-                if ($(this).hasClass('active')) {
-                    return;
-                } else {
-                    $('.imperialBtn').removeClass('active');
-                    $('.metricBtn').addClass('active');
-                }
-        }
-    }
-}
-
-// This function will save the user's setting preferences to their localStorage
-function save() {
-    // If the user chose 12-Hour time
-    if ($('.12HourBtn').hasClass('active')) {
-        localStorage.setItem('clock', 12);
-    }
-    // If the user chose 24-Hour time
-    else {
-        localStorage.setItem('clock', 24);
-    }
-
-    // If the user chose Imperial
-    if ($('.imperialBtn').hasClass('active')) {
-        localStorage.setItem('unit', 'imperial');
-    }
-    // If the user chose Metric
-    else {
-        localStorage.setItem('unit', 'metric');
-    }
-
-    // Refresh the page so that the changes can take place
-    location.reload();
-}
-
-// This function will add the class of 'active' back to the button it was on before the user hit cancel
-function cancel() {
-    // Check and see if the clock in localStorage is 24
-    switch (localStorage.getItem('clock') == '24') {
-        // If it is then switch the 24-Hour button to active
-        case true:
-            $('.12HourBtn').removeClass('active');
-            $('.24HourBtn').addClass('active');
-            break;
-
-        // It it's not then switch the 12-Hour button to active
-        default:
-            $('.24HourBtn').removeClass('active');
-            $('.12HourBtn').addClass('active');
-    }
-
-    // Check and see if unit in localStorage is set to metric
-    switch (unit == 'metric') {
-        // If it is then switch the Metric button to active
-        case true:
-            $('.imperialBtn').removeClass('active');
-            $('.metricBtn').addClass('active');
-            break;
-
-        // If it's not then set the Imperial button to active
-        default:
-            $('.metricBtn').removeClass('active');
-            $('.imperialBtn').addClass('active');
+        // Then it will display the error there
+        $('.error2').slideDown('600');
     }
 }
 
 // This function will simply make the error message go away
-function error() {
+function errorRemove() {
     errorMes.slideUp('600');
 }

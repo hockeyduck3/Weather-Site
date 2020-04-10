@@ -12,6 +12,7 @@ body {
 }
 
 .bg-dark {
+    /* The !important needed to be on here otherwise it would not override the !important that bootstrap set */
     background-color: #444 !important;
 }
 
@@ -266,6 +267,11 @@ blockquote p {
 
 .settingsBtn1:focus, .settingsBtn2:focus {
     outline: none;
+}
+
+.settingsBtn2:active {
+    transform: scale(1.1);
+    transition: ease-in-out 0.2s;
 }
 
 /* Modal buttons styling */
