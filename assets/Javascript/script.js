@@ -466,35 +466,38 @@ function searchCity() {
             // Set the text to the UV Index number
             $('.uviInfo').text(currentUVI);
 
+            // This if statement will check to see if the UV Index is between 3 and 6, which would be in the yellow zone.
             if (currentUVI >= 3 && currentUVI <= 6) {
+                // If it is then set the color of the text to black, otherwise it will be hard to read.
                 $('.uviInfo').css('color', 'black');
             } else {
+                // If it's not then set the text color to white.
                 $('.uviInfo').css('color', 'white');       
             }
 
             // This if else will run and check where the UV Index is at.
 
-            // If the UVI is greater than or equal to eleven, then set the background to purple and reset the text color to white.
+            // If the UVI is greater than or equal to eleven, then set the background to purple.
             if (currentUVI >= 11) {
                 $('.uviInfo').css('background-color', 'purple');
             }
 
-            // If the UVI is greater than or equal to 8, set the background to red and reset the text color to white.
+            // If the UVI is greater than or equal to 8, set the background to red.
             else if (currentUVI >= 8) {
                 $('.uviInfo').css('background-color', 'red');
             }
 
-            // If the UVI is greater than or equal to 6, set the background to orange and reset the text color to white.
+            // If the UVI is greater than or equal to 6, set the background to orange.
             else if (currentUVI >= 6) {
                 $('.uviInfo').css('background-color', 'orange');
             }
 
-            // If the UVI is greater than or equal to 3, set the background to yellow and set the text color to black. This one is special because white text on a yellow background is difficult to read.
+            // If the UVI is greater than or equal to 3, set the background to yellow.
             else if (currentUVI >= 3) {
                 $('.uviInfo').css('background-color', 'yellow');
             }
 
-            // Finally if none of the above run, then set the UVI background to green and reset the text color to white.
+            // Finally if none of the above run, then set the UVI background to green.
             else {
                 $('.uviInfo').css('background-color', 'green');
             }
