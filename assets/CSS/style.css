@@ -126,10 +126,20 @@ blockquote p {
     width: 35px;
 }
 
-.uviInfo {
+.uviInfo, .uviMoreInfo {
     margin-left: 5px;
     padding: 5px;
     border-radius: 5px;
+    border: none;
+}
+
+.uviInfo:focus {
+    outline: none;
+}
+
+.uviMoreInfo {
+    text-align: center;
+    margin-left: 0;
 }
 
 /* Styling for the 5-Day forecast */

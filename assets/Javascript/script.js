@@ -7,7 +7,7 @@ var errorMes = $('.error');
 var name;
 var prev = '';
 var whichSearch = 'firstSearch';
-var momentFormat;
+var format;
 var timeForm;
 var unit;
 var unitTemp;
@@ -35,6 +35,9 @@ $('.searchBar2').click(function () {
         $('.prevDiv').slideDown('slow');
     }
 })
+
+// When the user clicks on uviInfo trigger the uviInfoToggle
+$('.uviInfo').click(uviInfoToggle)
 
 // This function will check and see if the user clicked anywhere on the body of the webpage
 $(document.body).click(function (event) {
@@ -227,11 +230,11 @@ function load() {
 
     // Check and see if 'clock' is not in the local storage
     switch (localStorage.getItem('clock') === null) {
-        // If true then set 'clock' to 12 in the user's local storage, and set the timeForm variable to 12 and the momentFormat to 12-Hour format.
+        // If true then set 'clock' to 12 in the user's local storage, and set the timeForm variable to 12 and the format varaible to 12-Hour format.
         case true:
             localStorage.setItem('clock', 12);
             timeForm = 12;
-            momentFormat = moment().format('llll');
+            format = 'llll';
             break;
 
         // If 'clock' is set in the user's local storage
@@ -247,21 +250,21 @@ function load() {
                     $('.24HourBtn').addClass('active');
 
                     // And format the dateTime text to 24-Hour format
-                    momentFormat = moment().format("ddd, ll HH:mm");
+                    format = "ddd, ll HH:mm";
                     break;
 
                 // If it's set to 12 then format the dateTime text to 12-Hour format
                 default:
-                    momentFormat = moment().format('llll');
+                    format = 'llll';
             }
     }
 
     // Set the date and time text to the current date and time via moment.js
-    $('.dateTime').text(momentFormat);
+    $('.dateTime').text(moment().format(format));
 
     // This interval will make sure that the date and time is always up to date
     setInterval(function () {
-        $('.dateTime').text(momentFormat);
+        $('.dateTime').text(moment().format(format));
     }, 1000);
 
     // Check and see if the user does not have 'unit' set in their localStorage
@@ -438,6 +441,10 @@ function searchBar() {
 
 // Search city function
 function searchCity() {
+    if ($('.row').hasClass('dropup')) {
+        uviInfoToggle();
+    }
+
     // Just in case if the error is still on the screen run the errorRemove function
     errorRemove();
 
@@ -464,42 +471,95 @@ function searchCity() {
             var daily = oneCallRepsponse.daily;
 
             // Set the text to the UV Index number
-            $('.uviInfo').text(currentUVI);
+            $('.uviInfo, .uviInfo2').text(currentUVI);
 
             // This if statement will check to see if the UV Index is between 3 and 6, which would be in the yellow zone.
-            if (currentUVI >= 3 && currentUVI <= 6) {
+            if (currentUVI >= 3 && currentUVI <= 5.99) {
                 // If it is then set the color of the text to black, otherwise it will be hard to read.
-                $('.uviInfo').css('color', 'black');
+                $('.uviInfo, .uviMoreInfo').css('color', 'black');
             } else {
                 // If it's not then set the text color to white.
-                $('.uviInfo').css('color', 'white');       
+                $('.uviInfo, .uviMoreInfo').css('color', 'white');       
             }
 
-            // This if else will run and check where the UV Index is at.
-
-            // If the UVI is greater than or equal to eleven, then set the background to purple.
+            // If the UV Index is greater or equal to eleven
             if (currentUVI >= 11) {
-                $('.uviInfo').css('background-color', 'purple');
-            }
+                // Then set the background color to purple
+                $('.uviInfo, .uviMoreInfo').css('background-color', 'purple');
 
-            // If the UVI is greater than or equal to 8, set the background to red.
-            else if (currentUVI >= 8) {
-                $('.uviInfo').css('background-color', 'red');
-            }
+                // Check and see if the user prefers 12-Hour time format
+                if (timeForm == 12) {
+                    // If the user does, then set the elevenOrHigher text to warn the user to stay inside between 10am and 4pm. 
+                    $('.elevenOrHigher').text('Stay inside between the hours of 10am and 4pm.');
+                } else {
+                    // If the user prefers 24-hour format, then set the elevenOrHigher text to warn the user to stay inside between 10:00 and 16:00.
+                    $('.elevenOrHigher').text('Stay inside between the hours of 10:00 and 16:00.');
+                }
+                
+                // Set the text of uviMoreText
+                $('.uviMoreText').text('Sunscreen, Sunglasses, a Hat, and Shade are also advised.');
 
-            // If the UVI is greater than or equal to 6, set the background to orange.
-            else if (currentUVI >= 6) {
-                $('.uviInfo').css('background-color', 'orange');
-            }
+                // And set the burnTime text to 15 minutes or less
+                $('.burnTime').text('15 minutes or less.');
 
-            // If the UVI is greater than or equal to 3, set the background to yellow.
+            } 
+            
+            // Or if the current UV Index is between 6 and 10.99
+            else if (currentUVI >= 6 && currentUVI <= 10.99) {
+                // Make sure elevenOrHigher is empty of text
+                $('.elevenOrHigher').empty();
+
+                // Set the text of uviMoreText
+                $('.uviMoreText').text('Sunscreen, Sunglasses, a Hat, and Shade are advised.');
+
+                // Then check and see if the current UV Index is greater or equal to 8
+                if (currentUVI >= 8) {
+                    // If it is then set the background color to red
+                    $('.uviInfo, .uviMoreInfo').css('background-color', 'red');
+
+                    // Then set the burnTime text to 20 minutes or less
+                    $('.burnTime').text('20 minutes or less.');
+                } 
+
+                // If it's not greater or equal to 8
+                else {
+                    // Set the background color to orange
+                    $('.uviInfo, .uviMoreInfo').css('background-color', 'orange');
+
+                    // Then set the burnTime text to 30 minutes or less
+                    $('.burnTime').text('30 minutes or less.');
+                }
+
+            } 
+            
+            // Or if the current UV Index is greater or equal to 3
             else if (currentUVI >= 3) {
-                $('.uviInfo').css('background-color', 'yellow');
-            }
+                // Make sure elevenOrHigher is empty of text 
+                $('.elevenOrHigher').empty();
 
-            // Finally if none of the above run, then set the UVI background to green.
+                // Set the background color to yellow
+                $('.uviInfo, .uviMoreInfo').css('background-color', 'yellow');
+
+                // Set the text of uviMoreText
+                $('.uviMoreText').text('Sunscreen, Sunglasses, a Hat are advised.');
+
+                // Set the burnTime text to 40 minutes or less
+                $('.burnTime').text('40 minutes or less.');
+            } 
+            
+            // Finally if none of the other if statements run
             else {
-                $('.uviInfo').css('background-color', 'green');
+                // Make sure elevenOrHigher is empty of text
+                $('.elevenOrHigher').empty();
+
+                // Set the background color to green
+                $('.uviInfo, .uviMoreInfo').css('background-color', 'green');
+
+                // Set the text of uviMoreText
+                $('.uviMoreText').text('Sunglasses, and a Hat are advised.');
+
+                // Set the burnTime text to 60 minutes or less
+                $('.burnTime').text('60 minutes or less.');
             }
 
             // This list will be used to grab list 1, 2, 3, 4, 5, then grab specific info from those lists
@@ -698,6 +758,27 @@ function displayError() {
     else {
         // Then it will display the error there
         $('.error2').slideDown('600');
+    }
+}
+
+// Function for the uviInfo
+function uviInfoToggle() {
+    // Check and see if row also has a class of dropup on it
+    if ($('.row').hasClass('dropup')) {
+        // If it does then remove the uviMoreInfo section with a slide up animation
+        $('.uviMoreInfo').slideUp('fast');
+
+        // Then remove the class of 'dropup' from the row class
+        $('.row').removeClass('dropup');
+    } 
+    
+    // If it does not have a class of dropup on it
+    else {
+        // Show the user more UV Index info using a slide down animation
+        $('.uviMoreInfo').slideDown('slow');
+
+        // And add the class 'dropup' to the class of row
+        $('.row').addClass('dropup');
     }
 }
 
