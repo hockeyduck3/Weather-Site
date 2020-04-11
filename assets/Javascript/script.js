@@ -541,7 +541,7 @@ function searchCity() {
                 $('.uviInfo, .uviMoreInfo').css('background-color', 'yellow');
 
                 // Set the text of uviMoreText
-                $('.uviMoreText').text('Sunscreen, Sunglasses, a Hat are advised.');
+                $('.uviMoreText').text('Sunscreen, Sunglasses, and a Hat are advised.');
 
                 // Set the burnTime text to 40 minutes or less
                 $('.burnTime').text('40 minutes or less.');
