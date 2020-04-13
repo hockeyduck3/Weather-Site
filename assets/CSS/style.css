@@ -240,7 +240,7 @@ blockquote p {
 }
 
 /* Styling for the error's */
-.error, .error2 {
+.error, .error2, .defaultError {
     border-radius: 1rem;
     border: 2px solid red;
     color: red;
@@ -256,6 +256,11 @@ blockquote p {
     font-size: 15px;
     margin: 10px 15px 0 0;
     width: 400px;
+}
+
+.defaultError {
+    width: 90%;
+    margin-left: 15px;
 }
 
 /* Styling for the setting buttons */
