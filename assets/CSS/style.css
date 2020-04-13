@@ -9,6 +9,9 @@ body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
+
+    /* This padding right needs to have the !important tag on it, otherwise the modal will add a padding right of 16px to the body */
+    padding-right: 0 !important;
 }
 
 .bg-dark {
@@ -275,7 +278,7 @@ blockquote p {
     top: 0;
 }
 
-.settingsBtn1:focus, .settingsBtn2:focus {
+.settingsBtn1:focus, .settingsBtn2:focus, .unitBtn:focus, .timeBtn:focus, .saveBtn:focus, .cancelBtn:focus {
     outline: none;
 }
 
