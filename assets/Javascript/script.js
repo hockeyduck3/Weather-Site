@@ -1,7 +1,7 @@
 // Variables needed
 var cityVal;
 var queryURL;
-var fiveDayURL;
+var quickURL;
 var prevSearches = [];
 var errorMes = $('.error');
 var name;
@@ -190,14 +190,40 @@ $('.saveBtn').click(function () {
     var defaultLocal = $('#defaultLocation').val().trim();
 
     if (defaultLocal !== '') {
-        localStorage.setItem('default', defaultLocal);
-    } else if (localStorage.getItem('default') !== null) {
+        if (defaultLocal.match(/[a-z]/i) && defaultLocal.match(/[0-9]/)) {
+            $('.defaultError').text('Please only use a city or zip');
+            $('.defaultError').slideDown('fast');
+            $('#defaultLocation').val('')
+        } else if (defaultLocal.match(/[a-z]/)) {
+            quickURL = `https://api.openweathermap.org/data/2.5/weather?q=${defaultLocal}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+            quickCheck();
+        } else if (defaultLocal.match(/[0-9]/)) {
+            quickURL = `https://api.openweathermap.org/data/2.5/weather?zip=${defaultLocal}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+            quickCheck();
+        }
+    } 
+    
+    else if (localStorage.getItem('default') !== null) {
         localStorage.removeItem('default');
     }
 
-    // Refresh the page so that the changes can take place
-    location.reload();
 });
+
+function quickCheck() {
+    $.ajax({
+        url: quickURL,
+        method: 'GET'
+    }).then(function (quickResponse) {
+        localStorage.setItem('default', quickResponse.name);
+        
+        // Refresh the page so that the changes can take place
+        location.reload();
+    }).catch( function (quickError) {
+        $('.defaultError').text(`Error ${quickError.responseJSON.cod}: ${quickError.responseJSON.message}`);
+        $('.defaultError').slideDown('fast');
+        $('#defaultLocation').val('')
+    })
+}
 
 // When the cancel button is clicked trigger the cancel function
 $('.cancelBtn').click(function () {
@@ -408,7 +434,7 @@ function searchBar() {
     }
 
     // If cityVal is not empty, then this will check and see if there are both letters and numbers in the search bar.
-    else if (cityVal.match(/[a-z]/) && cityVal.match(/[0-9]/)) {
+    else if (cityVal.match(/[a-z]/i) && cityVal.match(/[0-9]/)) {
         // If there is both a city name and a zip code, then this error message will display.
         errorMes.text('Please only search for a city or zip');
 
