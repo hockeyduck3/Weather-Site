@@ -1,7 +1,6 @@
 // Variables needed
 var cityVal;
 var queryURL;
-var fiveDayURL;
 var prevSearches = [];
 var errorMes = $('.error');
 var name;
@@ -397,7 +396,7 @@ function searchBar() {
     }
 
     // If cityVal is not empty, then this will check and see if there are both letters and numbers in the search bar.
-    else if (cityVal.match(/[a-z]/) && cityVal.match(/[0-9]/)) {
+    else if (cityVal.match(/[a-z]/i) && cityVal.match(/[0-9]/)) {
         // If there is both a city name and a zip code, then this error message will display.
         errorMes.text('Please only search for a city or zip');
 
