@@ -187,6 +187,14 @@ $('.saveBtn').click(function () {
         localStorage.setItem('unit', 'metric');
     }
 
+    var defaultLocal = $('#defaultLocation').val().trim();
+
+    if (defaultLocal !== '') {
+        localStorage.setItem('default', defaultLocal);
+    } else if (localStorage.getItem('default') !== null) {
+        localStorage.removeItem('default');
+    }
+
     // Refresh the page so that the changes can take place
     location.reload();
 });
@@ -295,7 +303,10 @@ function load() {
                     unitTemp = '°F';
                     unitSpeed = 'm/h';
             }
+    }
 
+    if (localStorage.getItem('default') !== null) {
+        $('#defaultLocation').val(localStorage.getItem('default'))
     }
 
     // This will check and see if the user has made a search recently
