@@ -278,7 +278,7 @@ blockquote p {
     top: 0;
 }
 
-.settingsBtn1:focus, .settingsBtn2:focus, .unitBtn:focus, .timeBtn:focus, .saveBtn:focus, .cancelBtn:focus {
+.settingsBtn1:focus, .settingsBtn2:focus, .unitBtn:focus, .timeBtn:focus, .saveBtn:focus, .cancelBtn:focus, #defaultLocation:focus {
     outline: none;
 }
 
@@ -304,8 +304,7 @@ blockquote p {
     background-color: #444;
 }
 
-
-/* Settings for the time settings */
+/* Styling for the time settings */
 .timeBtn, .unitBtn {
     background-color: #8c9094;
     border: none;
@@ -314,7 +313,7 @@ blockquote p {
     font-size: 20px;
 }
 
-.timeFormText, .unitFormText {
+.timeFormText, .unitFormText, .defaultText {
     margin-top: 5px;
     margin-right: 5px;
     font-size: 25px;
@@ -326,6 +325,29 @@ blockquote p {
 
 .unitRow {
     margin-top: 10px;
+}
+
+
+/* Styling for the default location */
+.deafultLocationRow {
+    display: inline-flex;
+    margin-left: 15px;
+}
+
+.defaultText {
+    font-size: 20px;
+}
+
+#defaultLocation {
+    margin-top: 2px;
+    margin-bottom: 10px;
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    height: 40px;
+}
+
+#defaultLocation:focus {
+    border-color: #80bdff;
 }
 
 /* Using this to hide things initially, then using jQuery to hide the rest */
