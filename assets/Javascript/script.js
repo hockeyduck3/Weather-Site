@@ -1,10 +1,7 @@
 // Variables needed
 var cityVal;
 var queryURL;
-<<<<<<< HEAD
-=======
 var quickURL;
->>>>>>> 30167909cf27858a1b2becef619c8ce5b62d48d0
 var prevSearches = [];
 var errorMes = $('.error, .defaultError');
 var name;
@@ -280,20 +277,29 @@ function quickCheck() {
             localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
         } 
 
-        // After the first if state runs, check and see if the last search in the user's local storage is not the same as the default location
-        if (localStorage.getItem('lastSearch') !== localStorage.getItem('default')) {
-            // If it is not the same, then set the last search in the user's local storage to the front of the previous searches array
-            prevSearches.unshift(localStorage.getItem('lastSearch'));
+        // Check and see if the user has a last search saved into their local storage
+        if (localStorage.getItem('lastSearch') !== null) {
+            // If they do, then check and see if the last search in the user's local storage is not the same as the default location
+            if (localStorage.getItem('lastSearch') !== localStorage.getItem('default')) {
+                // If it is not the same, then set the last search in the user's local storage to the front of the previous searches array
+                prevSearches.unshift(localStorage.getItem('lastSearch'));
 
-            // Save the previous searches array to the local storage using the JSON stringify method
-            localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+                // Save the previous searches array to the local storage using the JSON stringify method
+                localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
 
-            // Then delete the last search from the user's local storage
-            localStorage.removeItem('lastSearch');
-        }
+                // Then delete the last search from the user's local storage
+                localStorage.removeItem('lastSearch');
+            }
+            
+            // Refresh the page so that the changes can take place
+            location.reload();
+        } 
         
-        // Refresh the page so that the changes can take place
-        location.reload();
+        // If there is no last search in the user's local storage
+        else {
+            // Refresh the page so that the changes can take place
+            location.reload();
+        }
 
        // If the user's default was not accepted as a valid location 
     }).catch( function (quickError) {
@@ -443,7 +449,7 @@ function load() {
     }
 
     // This if statement will load up either the welcome buttons, or the user's previous searches. Depending on if they have made any searches.
-    if (JSON.parse(localStorage.getItem('prevSearches')) === null && localStorage.getItem('lastSearch') === null) {
+    if (JSON.parse(localStorage.getItem('prevSearches')) === null && localStorage.getItem('lastSearch') === null && localStorage.getItem('default') === null) {
         // Load welcome buttons
         loadButtons1();
     } else {
