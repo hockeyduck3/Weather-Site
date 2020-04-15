@@ -1,10 +1,7 @@
 // Variables needed
 var cityVal;
 var queryURL;
-<<<<<<< HEAD
-=======
 var quickURL;
->>>>>>> 30167909cf27858a1b2becef619c8ce5b62d48d0
 var prevSearches = [];
 var errorMes = $('.error, .defaultError');
 var name;
