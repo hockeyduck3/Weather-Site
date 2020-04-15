@@ -343,6 +343,12 @@ $('.cancelBtn').click(function () {
             $('.metricBtn').removeClass('active');
             $('.imperialBtn').addClass('active');
     }
+
+    // Set the value of default location back to what it is in the user's local storage. If there is nothing in the local storage then it will be set back to it's default.
+    $('#defaultLocation').val(localStorage.getItem('default'))
+
+    // Remove any error's on the settings modal
+    errorRemove();
 });
 
 // Load function

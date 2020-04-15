@@ -16,6 +16,12 @@ body {
     padding-right: 0 !important;
 }
 
+/* This styling will make it so that the user can't scroll on the body when the modal is showing */
+body.modal-open {
+    height: 100vh;
+    overflow-y: hidden;
+}
+
 .bg-dark {
     /* The !important needed to be on here otherwise it would not override the !important that bootstrap set */
     background-color: #444 !important;
@@ -63,6 +69,11 @@ hr {
     height: 2px;
 }
 
+.modalHr {
+    background-color: rgb(221, 221, 221);
+    height: 1px;
+}
+
 p {
     margin-bottom: 10px;
     font-size: 20px;
@@ -80,7 +91,7 @@ blockquote p {
 }
 
 .container-fluid {
-    margin: 0px auto 30px auto;
+    margin: 0px auto 10px auto;
     padding-left: 0;
     padding-right: 0;
 }
@@ -339,7 +350,6 @@ blockquote p {
 /* Styling for the default location */
 .deafultLocationRow {
     display: inline-flex;
-    margin-left: 15px;
 }
 
 .defaultText {
@@ -542,6 +552,11 @@ footer p{
 
     .defaultText {
         font-size: 15px;
+    }
+
+    /* Make sure the default location is lined up in the settings modal */
+    #defaultLocation {
+        margin-top: 8px;
     }
 
     /* Changing the width to be 10px smaller */
