@@ -9,8 +9,10 @@ body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
+}
 
-    /* This padding right needs to have the !important tag on it, otherwise the modal will add a padding right of 16px to the body */
+.modal, body {
+    /* This padding right needs to have the !important tag on it, otherwise the modal will add a padding right of 16px to the body and itself */
     padding-right: 0 !important;
 }
 
@@ -129,6 +131,7 @@ blockquote p {
     width: 35px;
 }
 
+/* Styling for the UV Index info */
 .uviInfo, .uviMoreInfo {
     margin-left: 5px;
     padding: 5px;
@@ -490,6 +493,11 @@ footer p{
         margin: 12px 2%;
     }
 
+    /* Change the font size of the default location text */
+    .defaultText {
+        font-size: 16px;
+    }
+
     /* Text styling */
     .fiveDayText, .currentDayText {
        margin-left: 0;
@@ -529,6 +537,10 @@ footer p{
     }
 
     .timeBtn, .unitBtn, .timeFormText, .unitFormText {
+        font-size: 15px;
+    }
+
+    .defaultText {
         font-size: 15px;
     }
 

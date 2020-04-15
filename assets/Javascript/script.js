@@ -3,7 +3,7 @@ var cityVal;
 var queryURL;
 var quickURL;
 var prevSearches = [];
-var errorMes = $('.error');
+var errorMes = $('.error, .defaultError');
 var name;
 var prev = '';
 var whichSearch = 'firstSearch';
@@ -55,7 +55,7 @@ $(document.body).click(function (event) {
 })
 
 // This function will check and see if the user clicked the 'Enter' key
-$('.firstSearch, .navSearch').on('keydown', function (event) {
+$('.firstSearch, .navSearch, .defaultLocation').on('keydown', function (event) {
     // Check and see if the user hit enter on the welcome page search bar
     if ($(event.target).hasClass('searchBar')) {
         // If the 'Enter' key is clicked then run the grabCityVal function
@@ -67,8 +67,15 @@ $('.firstSearch, .navSearch').on('keydown', function (event) {
         else {
             errorRemove();
         }
+    } 
+
+    // Check and see if the user typed in the defaultLocation text
+    else if ($(event.target).hasClass('defaultLocation')) {
+        // If they didd then remove any error
+        errorRemove();
     }
 
+    // If neither of the two if statements above don't run, then the user was typing in the navbar search
     else {
         //If the 'Enter' key is clicked then run the searchBar function
         if (event.keyCode === 13) {
@@ -187,41 +194,114 @@ $('.saveBtn').click(function () {
         localStorage.setItem('unit', 'metric');
     }
 
+    // Set the variable for the default location to the value of the id defaultLocation and trim the white spaces off of it
     var defaultLocal = $('#defaultLocation').val().trim();
 
+    // Check and see if defaultLocal is not equal to an empty string
     if (defaultLocal !== '') {
+        // If it's not empty then check and see if there both letters and numbers in the value
         if (defaultLocal.match(/[a-z]/i) && defaultLocal.match(/[0-9]/)) {
+            // If there are then set this text of the error
             $('.defaultError').text('Please only use a city or zip');
+
+            // Slide the error down
             $('.defaultError').slideDown('fast');
-            $('#defaultLocation').val('')
-        } else if (defaultLocal.match(/[a-z]/)) {
+
+            // Then delete the value
+            $('#defaultLocation').val('');
+
+        } 
+        
+        // If it does not contain both letters and numbers, check and see if it only as letters
+        else if (defaultLocal.match(/[a-z]/i)) {
+            // If true then set the quickURL variable to the link below with the query being defaultLocal
             quickURL = `https://api.openweathermap.org/data/2.5/weather?q=${defaultLocal}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+            
+            // Run the quickCheck function
             quickCheck();
-        } else if (defaultLocal.match(/[0-9]/)) {
+        } 
+        
+        // If it does not contain letters, then check and see if it contains numbers
+        else if (defaultLocal.match(/[0-9]/)) {
+            // If it does have numbers, then set the quickURL to the zip code url and search with the query defaultLocal
             quickURL = `https://api.openweathermap.org/data/2.5/weather?zip=${defaultLocal}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+           
+            // Run the quickCheck function
             quickCheck();
+        } 
+
+        // If none of the other if statements above run then this will run
+        else {
+            // Set the text of this error
+            $('.defaultError').text('Value cannot be read');
+
+            // Slide the error down
+            $('.defaultError').slideDown('fast');
         }
     } 
     
+    // If defaultLocal is a blank string then check and see if there already is a default set in user's local storage
     else if (localStorage.getItem('default') !== null) {
+        // If there is then remove it from the local storage since, this acts as a way for the user to delete their default search.
         localStorage.removeItem('default');
-    }
 
+        // Then reload the page
+        location.reload();
+    } 
+    
+    // If none of the above if statements run the reload the page
+    else {
+        location.reload();
+    }
 });
 
+/* This function will run a quick ajax search to check and see if ther user's default location settings is a legit location.
+This will help to mkae sure that if the user puts in a non-valid location then it won't cause errors when the page reloads. */
 function quickCheck() {
+    // Run the ajax request
     $.ajax({
         url: quickURL,
         method: 'GET'
+
+       // If the user user's default was accepted as a valid location    
     }).then(function (quickResponse) {
+        // Then save the quick response's name as the default location in the user's local storage 
         localStorage.setItem('default', quickResponse.name);
+
+        // Then check and see if if the default location is in the previous searches array
+        if (prevSearches.indexOf(localStorage.getItem('default')) !== -1) {
+            // If it is the splice it out of the array
+            prevSearches.splice(prevSearches.indexOf(localStorage.getItem('default')), 1);
+
+            // And resave the list to the user's local storage
+            localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+        } 
+
+        // After the first if state runs, check and see if the last search in the user's local storage is not the same as the default location
+        if (localStorage.getItem('lastSearch') !== localStorage.getItem('default')) {
+            // If it is not the same, then set the last search in the user's local storage to the front of the previous searches array
+            prevSearches.unshift(localStorage.getItem('lastSearch'));
+
+            // Save the previous searches array to the local storage using the JSON stringify method
+            localStorage.setItem('prevSearches', JSON.stringify(prevSearches));
+
+            // Then delete the last search from the user's local storage
+            localStorage.removeItem('lastSearch');
+        }
         
         // Refresh the page so that the changes can take place
         location.reload();
+
+       // If the user's default was not accepted as a valid location 
     }).catch( function (quickError) {
+        // Set the default error text to the error in the console
         $('.defaultError').text(`Error ${quickError.responseJSON.cod}: ${quickError.responseJSON.message}`);
+
+        // Quickly show the user the error using the jQuery slide down animation
         $('.defaultError').slideDown('fast');
-        $('#defaultLocation').val('')
+
+        // Remove what the user typed in from the default location text
+        $('#defaultLocation').val('');
     })
 }
 
@@ -331,12 +411,23 @@ function load() {
             }
     }
 
+    // Check and see if the user has set a default location
     if (localStorage.getItem('default') !== null) {
+        // If they have then set the value of default location in the settings modal to the value that's saved in the user's local storage
         $('#defaultLocation').val(localStorage.getItem('default'))
+
+        // Then set the city value variable to the value in the local storage
+        cityVal = localStorage.getItem('default');
+
+        // Set the queryURL variable
+        queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
+        
+        // Then run the serach city function
+        searchCity();
     }
 
     // This will check and see if the user has made a search recently
-    if (localStorage.getItem('lastSearch') !== null) {
+    else if (localStorage.getItem('lastSearch') !== null) {
         // if they have then cityVal will be set to their last search item and the page will load
         cityVal = localStorage.getItem('lastSearch');
         queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
@@ -443,7 +534,7 @@ function searchBar() {
     }
 
     // If neither error messages are displayed, then this will check and see if cityVal is a city. 
-    else if (cityVal.match(/[a-z]/)) {
+    else if (cityVal.match(/[a-z]/i)) {
         // If it is, then the queryURL will search by city name
         queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityVal}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
@@ -637,6 +728,7 @@ function searchCity() {
         // Set the variable name to the city name given by OpenWeather
         name = response.name;
 
+        // Set the variable main to the the main section of the response from OpenWeather
         var main = response.main;
 
         // Change the card title the name of the city from the response
@@ -699,6 +791,12 @@ function addToList() {
     if (prev === '') {
         // Set prev to the string of name
         prev = name;
+    }
+
+    // This if statement will check and see if the user has made a previous search
+    if (localStorage.getItem('lastSearch') !== null) {
+        // If they have then prev will be set to the value in the local storage
+        prev = localStorage.getItem('lastSearch');
     }
 
     // If prev is equal to name
@@ -819,7 +917,7 @@ function uviInfoToggle() {
     }
 }
 
-// This function will simply make the error message go away
+// This function will simply make any error message go away using the jQuery slide up animation
 function errorRemove() {
     errorMes.slideUp('600');
 }
