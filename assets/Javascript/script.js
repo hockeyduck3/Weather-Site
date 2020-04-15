@@ -580,7 +580,10 @@ function searchCity() {
 
                 // Assign the temperature for that day to temp0, 1, 2, 3, 4
                 $(`.temp${e}`).text(`Temp: ${(daily[numberList[e]].temp.day).toFixed(1)} ${unitTemp}`);
-
+                
+                // Assign the humidity for that day to humidity0, 1, 2, 3, 4
+                $(`.humidity${e}`).text(`Humidity: ${daily[numberList[e]].humidity}%`);
+               
                 // // If the user prefers the metric system
                 if (unit === 'metric') {
                     // Then this will grab the current wind speed which is in meters per second, and convert it to km/h.
@@ -590,9 +593,6 @@ function searchCity() {
                 else {
                     $(`.wind${e}`).text(`Wind: ${(daily[numberList[e]].wind_speed).toFixed(1)} ${unitSpeed}`);
                 }
-
-                // Assign the humidity for that day to humidity0, 1, 2, 3, 4
-                $(`.humidity${e}`).text(`Humidity: ${daily[numberList[e]].humidity}%`);
             })
         })
 
