@@ -2,7 +2,7 @@
 
 * This project was built using HTML, CSS/Bootstrap and Javascript/jQuery
 
-* This was my week-6 assignment for my Full Stake Development course
+* This was my week-6 assignment for my Full Stack Development course
 
 * I wrote all of the code for this site, there was no predefined code
 
