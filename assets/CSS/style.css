@@ -459,6 +459,19 @@ footer p{
     .fiveDayText, .currentDayText {
         font-size: 40px;
         text-align: center;
+        text-decoration: underline;
+    }
+
+    .fiveDayText {
+        margin-top: 25px;
+    }
+
+    .date {
+        font-size: 18px;
+    }
+
+    .icon2 {
+        width: 40px;
     }
 }
 
@@ -486,7 +499,7 @@ footer p{
     /* Moment.js display */
     .dateTime {
         font-size: 28px;
-        margin: 0 auto 15px auto;
+        margin: 0 auto 20px auto;
     }
 
     .greetingText {
