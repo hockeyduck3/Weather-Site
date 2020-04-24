@@ -485,6 +485,10 @@ footer p{
     .cityName {
         font-size: 35px;
     }
+
+    main p {
+        font-size: 19px;
+    }
     
     /* Buttons in the previous/possible choices */
     .cityBtn {
