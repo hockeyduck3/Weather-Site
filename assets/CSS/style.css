@@ -380,13 +380,17 @@ blockquote p {
     text-align: center;
 }
 
-#githubLink {
+#githubLink, #openWeather, .weather {
     color: black;
     font-size: 15px;
     transition: linear 0.1s;
 }
 
-#githubLink:hover {
+#openWeather, .weather {
+    margin-bottom: 0;
+}
+
+#githubLink:hover, #openWeather:hover {
     color: rgb(116, 116, 116);
     transition: linear 0.1s;
     text-decoration: none;
@@ -543,8 +547,8 @@ footer p{
 /* iPhone 5/SE */
 @media(max-width: 320px) {
     /* Changed all of these font's to be just a tad smaller */
-    p {
-        font-size: 16px;
+    main p {
+        font-size: 15px;
     }
 
     .dateTime, .greetingText {
