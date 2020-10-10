@@ -465,8 +465,6 @@ function searchCity() {
         method: 'GET'
 
     }).then(function (response) {
-        console.log(response);
-
         // To get the UV Index info from openweather you have to have the locations lat and lon. 
         var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&units=${unit}&APPID=f6526fa7bca044387db97f2d4ab0e83b`;
 
@@ -475,8 +473,6 @@ function searchCity() {
             url: oneCallUrl,
             method: 'GET'
         }).then(function (oneCallRepsponse) {
-            console.log(oneCallRepsponse);
-
             var currentUVI = oneCallRepsponse.current.uvi;
 
             var daily = oneCallRepsponse.daily;
@@ -612,7 +608,6 @@ function searchCity() {
 
         // If the ajax request fails
     }).catch(function (error) {
-        console.log(error)
         errorMes.text(`Error ${error.responseJSON.cod}: ${error.responseJSON.message}`);
 
         displayError()
@@ -651,10 +646,10 @@ function addToList() {
         if (prevSearches.length >= 6) {
             // Check and see if the user's latest search is on the list
             if (prevSearches.indexOf(name) !== -1) {
-
                 prevSearches.splice(prevSearches.indexOf(name), 1);
-            } else {
-
+            } 
+            
+            else {
                 prevSearches.pop();
             }
 
